@@ -17,7 +17,7 @@ class PopularCategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 8,
+      flex: 0,
       child: Column(
         children: [
           Padding(
@@ -27,7 +27,7 @@ class PopularCategoryWidget extends StatelessWidget {
                 Text(
                   'Popular Now!',
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: 30,
                     fontWeight: FontWeight.w800,
                     color: colorScheme.onBackground,
                   ),
@@ -38,7 +38,7 @@ class PopularCategoryWidget extends StatelessWidget {
                   child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    elevation: 4,
+                    elevation: 2,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
@@ -85,8 +85,8 @@ class PopularCategoryWidget extends StatelessWidget {
                                         children: [
                                           SizedBox(height: 8),
                                           SizedBox(
-                                            height: 120,
-                                            width: 160,
+                                            height: 140,
+                                            width: 180,
                                             child: Hero(
                                               tag: e.name,
                                               child: Image.asset(
@@ -157,65 +157,68 @@ class _CategoryWidgetState extends State<CategoryWidget> {
     return Expanded(
       flex: 0,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 4),
+        padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Categories",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 23,
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            //   child: Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Text(
+            //       "Categories",
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w800,
+            //         fontSize: 23,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Hero(
               tag: "category",
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: category
-                      .map(
-                        (e) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4),
-                          child: ActionChip(
-                            label: Text(
-                              e['name'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color:
-                                    (categoryController.categoryModelGetx.i ==
-                                            category.indexOf(e))
-                                        ? colorScheme.background
-                                        : colorScheme.onBackground,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    children: category
+                        .map(
+                          (e) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: ActionChip(
+                              label: Text(
+                                e['name'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color:
+                                      (categoryController.categoryModelGetx.i ==
+                                              category.indexOf(e))
+                                          ? colorScheme.background
+                                          : colorScheme.onBackground,
+                                ),
                               ),
+                              backgroundColor:
+                                  (categoryController.categoryModelGetx.i ==
+                                          category.indexOf(e))
+                                      ? colorScheme.primary
+                                      : colorScheme.background,
+                              elevation:
+                                  (categoryController.categoryModelGetx.i ==
+                                          category.indexOf(e))
+                                      ? 6
+                                      : 0,
+                              onPressed: () {
+                                setState(() {
+                                  categoryController.changeCategory(
+                                    temp: category.indexOf(e),
+                                  );
+                                });
+                              },
                             ),
-                            backgroundColor:
-                                (categoryController.categoryModelGetx.i ==
-                                        category.indexOf(e))
-                                    ? colorScheme.primary
-                                    : colorScheme.background,
-                            elevation:
-                                (categoryController.categoryModelGetx.i ==
-                                        category.indexOf(e))
-                                    ? 6
-                                    : 0,
-                            onPressed: () {
-                              setState(() {
-                                categoryController.changeCategory(
-                                  temp: category.indexOf(e),
-                                );
-                              });
-                            },
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
             ),
@@ -240,80 +243,88 @@ class TopBannerCardWidget extends StatefulWidget {
 
 class _TopBannerCardWidgetState extends State<TopBannerCardWidget> {
   int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 5,
-      child: Column(
-        children: [
-          Expanded(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  pauseAutoPlayOnManualNavigate: true,
-                  autoPlay: true,
-                  viewportFraction: 0.8,
-                  autoPlayInterval: Duration(seconds: 4),
-                  autoPlayCurve: Curves.easeInOut,
-                  onPageChanged: ((index, _) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  })),
-              items: [
-                TopBannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/1.png',
-                  title: 'The Fastest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.secondaryContainer,
-                  cardColor: widget.colorScheme.secondaryContainer,
-                  titleColor: widget.colorScheme.onSecondaryContainer,
-                ),
-                TopBannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/2.png',
-                  title: 'The Safest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.tertiaryContainer,
-                  cardColor: widget.colorScheme.tertiaryContainer,
-                  titleColor: widget.colorScheme.onTertiaryContainer,
-                ),
-                TopBannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/3.png',
-                  title: 'The Achievement in Delivery!!',
-                  buttonTextColor: widget.colorScheme.primaryContainer,
-                  cardColor: widget.colorScheme.primaryContainer,
-                  titleColor: widget.colorScheme.onPrimaryContainer,
-                ),
-                TopBannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/4.png',
-                  title: 'The Hotest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.errorContainer,
-                  cardColor: widget.colorScheme.errorContainer,
-                  titleColor: widget.colorScheme.onErrorContainer,
-                ),
-              ],
-            ),
-          ),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            child: DotsIndicator(
-              dotsCount: 4,
-              position: _currentIndex,
-              decorator: DotsDecorator(
-                activeColor: widget.colorScheme.primary,
-                color: widget.colorScheme.onSurfaceVariant,
-                activeSize: Size(12, 12),
-                size: Size(10, 10),
-                activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                spacing: EdgeInsets.all(4),
+    // double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Container(
+      // width: screenWidth,
+      constraints: BoxConstraints.tight(Size.fromHeight(screenHeight / 3.5)),
+      child: Expanded(
+        flex: 5,
+        child: Column(
+          children: [
+            Expanded(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    pauseAutoPlayOnManualNavigate: true,
+                    autoPlay: true,
+                    viewportFraction: 0.8,
+                    autoPlayInterval: Duration(seconds: 4),
+                    autoPlayCurve: Curves.easeInOut,
+                    onPageChanged: ((index, _) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    })),
+                items: [
+                  TopBannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/1.png',
+                    title: 'The Fastest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.secondaryContainer,
+                    cardColor: widget.colorScheme.secondaryContainer,
+                    titleColor: widget.colorScheme.onSecondaryContainer,
+                  ),
+                  TopBannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/2.png',
+                    title: 'The Safest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.tertiaryContainer,
+                    cardColor: widget.colorScheme.tertiaryContainer,
+                    titleColor: widget.colorScheme.onTertiaryContainer,
+                  ),
+                  TopBannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/3.png',
+                    title: 'The Achievement in Delivery!!',
+                    buttonTextColor: widget.colorScheme.primaryContainer,
+                    cardColor: widget.colorScheme.primaryContainer,
+                    titleColor: widget.colorScheme.onPrimaryContainer,
+                  ),
+                  TopBannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/4.png',
+                    title: 'The Hotest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.errorContainer,
+                    cardColor: widget.colorScheme.errorContainer,
+                    titleColor: widget.colorScheme.onErrorContainer,
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              child: DotsIndicator(
+                dotsCount: 4,
+                position: _currentIndex,
+                decorator: DotsDecorator(
+                  activeColor: widget.colorScheme.primary,
+                  color: widget.colorScheme.onSurfaceVariant,
+                  activeSize: Size(12, 12),
+                  size: Size(10, 10),
+                  activeShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  spacing: EdgeInsets.all(4),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

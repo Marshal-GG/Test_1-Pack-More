@@ -48,11 +48,11 @@ class _HomePageState extends State<HomePage> {
             flex: 20,
             child: Column(
               children: [
-                TopBannerCardWidget(colorScheme: colorScheme),
-                Divider(indent: 25, endIndent: 25),
                 CategoryWidget(),
                 Divider(indent: 25, endIndent: 25),
-                PopularCategoryWidget(colorScheme: colorScheme)
+                PopularCategoryWidget(colorScheme: colorScheme),
+                Divider(indent: 25, endIndent: 25),
+                TopBannerCardWidget(colorScheme: colorScheme),
               ],
             ),
           )
