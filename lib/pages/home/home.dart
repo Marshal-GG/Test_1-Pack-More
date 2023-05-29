@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:test_1/models/getx/theme_getx_model.dart';
 import '../../controller/getx/category_controller_getx.dart';
 import 'components/body.dart';
 
@@ -63,6 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar buildAppBar(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -99,12 +102,22 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: IconButton(
-                icon: Icon(
-                  Icons.sunny,
-                  size: 17.5,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                onPressed: () {},
+                icon: themeProvider.isDarkMode
+                    ? Icon(
+                        Icons.sunny,
+                        size: 17.5,
+                        color: colorScheme.onSurfaceVariant,
+                      )
+                    : Icon(
+                        Icons.dark_mode,
+                        size: 17.5,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                onPressed: () {
+                  final provider =
+                      Provider.of<ThemeProvider>(context, listen: false);
+                  provider.toggleTheme(!themeProvider.isDarkMode);
+                },
               ),
             ),
           ),
