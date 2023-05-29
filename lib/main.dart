@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/home.dart';
+import 'pages/home/home.dart';
 import 'core/color_schemes.g.dart';
 
 Future main() async {

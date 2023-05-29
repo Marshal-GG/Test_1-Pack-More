@@ -35,6 +35,12 @@ dependencies:
   # dynamic_colorscheme: ^1.0.1
   google_fonts: 
   carousel_slider:
+  dots_indicator:
+  get:
+  shared_preferences:
+  provider:
+  image_picker:
+  image_picker_ios:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
