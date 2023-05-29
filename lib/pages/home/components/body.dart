@@ -1,4 +1,3 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ class PopularCategoryWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 35, right: 30),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: Row(
               children: [
                 Text(
@@ -36,12 +35,21 @@ class PopularCategoryWidget extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                   onTap: () {},
-                  child: Text(
-                    'View All ▶️',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.error,
-                      fontWeight: FontWeight.bold,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Text(
+                        'View All ▶️',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: colorScheme.error,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 )
@@ -53,7 +61,7 @@ class PopularCategoryWidget extends StatelessWidget {
             child: GetBuilder<CategoryControllerGetx>(
               builder: (carouselController) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -63,48 +71,60 @@ class PopularCategoryWidget extends StatelessWidget {
                             ? GestureDetector(
                                 onTap: () {},
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 8, bottom: 8),
+                                  padding: EdgeInsets.only(left: 0),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+                                        borderRadius: BorderRadius.circular(8)),
                                     elevation: 4,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(height: 8),
-                                        SizedBox(
-                                          height: 120,
-                                          width: 160,
-                                          child: Hero(
-                                            tag: e.name,
-                                            child: Image.asset(
-                                              e.image,
-                                              semanticLabel: e.name,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(height: 8),
+                                          SizedBox(
+                                            height: 120,
+                                            width: 160,
+                                            child: Hero(
+                                              tag: e.name,
+                                              child: Image.asset(
+                                                e.image,
+                                                semanticLabel: e.name,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          e.name,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: colorScheme.onSurfaceVariant,
+                                          SizedBox(height: 8),
+                                          Text(
+                                            e.name,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  colorScheme.onSurfaceVariant,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          '₹ ${e.price}',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: colorScheme.error,
+                                          Text(
+                                            e.category,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.normal,
+                                              color: colorScheme.tertiary,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 8),
-                                      ],
+                                          SizedBox(height: 4),
+                                          Text(
+                                            '₹ ${e.price}',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: colorScheme.error,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -123,92 +143,84 @@ class PopularCategoryWidget extends StatelessWidget {
   }
 }
 
-class CategoryWidget extends StatelessWidget {
-  const CategoryWidget({
-    super.key,
-  });
+class CategoryWidget extends StatefulWidget {
+  @override
+  State<CategoryWidget> createState() => _CategoryWidgetState();
+}
 
+class _CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final categoryController = Get.find<CategoryControllerGetx>();
+
     return Expanded(
-      flex: 3,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Categories",
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 23,
+      flex: 0,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Categories",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 23,
+                  ),
                 ),
               ),
             ),
-          ),
-          Hero(
-            tag: "category",
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: category
-                    .map(
-                      (e) => GetBuilder<CategoryControllerGetx>(
-                          builder: (categoryController) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            left: 10,
-                            top: 10,
-                            bottom: 10,
-                          ),
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              elevation: MaterialStateProperty.all(
-                                  (categoryController.categoryModelGetx.i ==
-                                          category.indexOf(e))
-                                      ? 6
-                                      : 0),
-                              backgroundColor: MaterialStateProperty.all(
+            Hero(
+              tag: "category",
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: category
+                      .map(
+                        (e) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          child: ActionChip(
+                            label: Text(
+                              e['name'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color:
+                                    (categoryController.categoryModelGetx.i ==
+                                            category.indexOf(e))
+                                        ? colorScheme.background
+                                        : colorScheme.onBackground,
+                              ),
+                            ),
+                            backgroundColor:
                                 (categoryController.categoryModelGetx.i ==
                                         category.indexOf(e))
-                                    ? colorScheme.primaryContainer
-                                    : colorScheme.tertiaryContainer,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(13),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    e['name'],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: (categoryController
-                                                    .categoryModelGetx.i ==
-                                                category.indexOf(e))
-                                            ? colorScheme.onPrimaryContainer
-                                            : colorScheme.onTertiaryContainer),
-                                  )
-                                ],
-                              ),
-                            ),
+                                    ? colorScheme.primary
+                                    : colorScheme.background,
+                            elevation:
+                                (categoryController.categoryModelGetx.i ==
+                                        category.indexOf(e))
+                                    ? 6
+                                    : 0,
                             onPressed: () {
-                              categoryController.changeCategory(
-                                temp: category.indexOf(e),
-                              );
+                              setState(() {
+                                categoryController.changeCategory(
+                                  temp: category.indexOf(e),
+                                );
+                              });
                             },
                           ),
-                        );
-                      }),
-                    )
-                    .toList(),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -328,9 +340,9 @@ class TopBannerCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: Material(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(20),
         color: cardColor,
         child: SizedBox(
           width: double.infinity,
@@ -345,38 +357,42 @@ class TopBannerCards extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 20,
-                          wordSpacing: 2.5,
-                          height: 1.4,
-                          letterSpacing: -0.7,
-                          color: titleColor,
-                          fontWeight: FontWeight.w700,
+                      Flexible(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            wordSpacing: 2.5,
+                            height: 1.4,
+                            letterSpacing: -0.7,
+                            color: titleColor,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(titleColor),
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          )),
-                          shape:
-                              MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          )),
-                        ),
-                        child: Text(
-                          "Order Now",
-                          style: TextStyle(
-                            color: buttonTextColor,
-                            fontSize: 14,
+                      Flexible(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(titleColor),
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            )),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            )),
+                          ),
+                          child: Text(
+                            "Order Now",
+                            style: TextStyle(
+                              color: buttonTextColor,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
@@ -386,18 +402,24 @@ class TopBannerCards extends StatelessWidget {
               ),
               Expanded(
                 flex: 5,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: Material(
-                      elevation: 8,
-                      borderRadius: BorderRadius.circular(30),
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.asset(
-                        imgurl,
-                        scale: 1.5,
-                        fit: BoxFit.cover,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: FractionallySizedBox(
+                      widthFactor: 0.9,
+                      child: Material(
+                        elevation: 8,
+                        borderRadius: BorderRadius.circular(30),
+                        clipBehavior: Clip.antiAlias,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            imgurl,
+                            scale: 1.5,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),

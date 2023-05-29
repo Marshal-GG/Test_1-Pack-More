@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 45),
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 child: Text(
                   "Welcome!",
                   style: GoogleFonts.alata(
@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 TopBannerCardWidget(colorScheme: colorScheme),
+                Divider(indent: 25, endIndent: 25),
                 CategoryWidget(),
+                Divider(indent: 25, endIndent: 25),
                 PopularCategoryWidget(colorScheme: colorScheme)
               ],
             ),
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
       title: Text(
         "Home",
         style: TextStyle(
-          color: colorScheme.primary,
+          color: colorScheme.onBackground,
           fontWeight: FontWeight.w700,
         ),
       ),
