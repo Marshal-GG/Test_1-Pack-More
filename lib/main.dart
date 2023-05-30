@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'core/firebase_initialize.dart';
 import 'models/getx/theme_getx_model.dart';
 import 'pages/home/home.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,13 +24,15 @@ class _MyAppState extends State<MyApp> {
       create: (context) => ThemeProvider(),
       builder: (context, child) {
         final themeProvider = Provider.of<ThemeProvider>(context);
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeModel.lightTheme,
-          darkTheme: ThemeModel.darkTheme,
-          themeMode: themeProvider.themeMode,
-          home: const HomePage(),
+        return SafeArea(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: ThemeModel.lightTheme,
+            darkTheme: ThemeModel.darkTheme,
+            themeMode: themeProvider.themeMode,
+            home: const HomePage(),
+          ),
         );
       },
     );

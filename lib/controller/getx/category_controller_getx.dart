@@ -9,18 +9,3 @@ class CategoryControllerGetx extends GetxController {
     update();
   }
 }
-
-// class CategoryControllerGetx extends GetxController {
-//   CategoryModelGetx? categoryModelGetx;
-
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     categoryModelGetx = CategoryModelGetx(i: 0);
-//   }
-
-//   changeCategory({required int temp}) {
-//     categoryModelGetx?.i = temp;
-//     update();
-//   }
-// }

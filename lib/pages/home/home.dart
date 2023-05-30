@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:test_1/models/getx/theme_getx_model.dart';
 import '../../controller/getx/category_controller_getx.dart';
@@ -30,28 +29,27 @@ class _HomePageState extends State<HomePage> {
       appBar: buildAppBar(context),
       body: Column(
         children: [
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 45),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Welcome!",
-                  style: GoogleFonts.alata(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 38,
-                      color: colorScheme.onBackground),
-                ),
-              ),
-            ),
-          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 45),
+          //     child: Align(
+          //       alignment: Alignment.center,
+          //       child: Text(
+          //         "Welcome!",
+          //         style: GoogleFonts.alata(
+          //             fontWeight: FontWeight.w900,
+          //             fontSize: 38,
+          //             color: colorScheme.onBackground),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Expanded(
             flex: 20,
             child: Column(
               children: [
                 CategoryWidget(),
-                Divider(indent: 25, endIndent: 25),
                 PopularCategoryWidget(colorScheme: colorScheme),
                 Divider(indent: 25, endIndent: 25),
                 TopBannerCardWidget(colorScheme: colorScheme),
@@ -69,6 +67,14 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
+      leading: IconButton(
+        icon: Icon(
+          Icons.menu_rounded,
+          size: 17.5,
+          color: colorScheme.onSurfaceVariant,
+        ),
+        onPressed: () {},
+      ),
       actions: [
         Padding(
           padding: EdgeInsets.all(12),

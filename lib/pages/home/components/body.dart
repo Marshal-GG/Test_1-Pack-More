@@ -1,18 +1,41 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/getx/category_controller_getx.dart';
-import '../../../models/resources.dart';
+import '../../../core/firebase_services.dart';
+import '../../../models/product_model.dart';
 
-class PopularCategoryWidget extends StatelessWidget {
+class PopularCategoryWidget extends StatefulWidget {
   const PopularCategoryWidget({
     super.key,
     required this.colorScheme,
   });
 
   final ColorScheme colorScheme;
+
+  @override
+  State<PopularCategoryWidget> createState() => _PopularCategoryWidgetState();
+}
+
+class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
+  FirebaseService firebaseService = FirebaseService();
+  List<Products> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  void fetchProducts() async {
+    List<Products> fetchedProducts = await firebaseService.fetchProducts();
+
+    setState(() {
+      products = fetchedProducts;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +52,7 @@ class PopularCategoryWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
-                    color: colorScheme.onBackground,
+                    color: widget.colorScheme.onBackground,
                   ),
                 ),
                 Spacer(),
@@ -43,10 +66,10 @@ class PopularCategoryWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: Text(
-                        'View All ▶️',
+                        'View All',
                         style: TextStyle(
                           fontSize: 14,
-                          color: colorScheme.error,
+                          color: widget.colorScheme.error,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -65,7 +88,7 @@ class PopularCategoryWidget extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: allProducts.map((e) {
+                      children: products.map((e) {
                         int id = carouselController.categoryModelGetx.i + 1;
                         return (e.id == id)
                             ? GestureDetector(
@@ -75,7 +98,7 @@ class PopularCategoryWidget extends StatelessWidget {
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8)),
-                                    elevation: 4,
+                                    elevation: 2,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 0, vertical: 10),
@@ -101,8 +124,8 @@ class PopularCategoryWidget extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
-                                              color:
-                                                  colorScheme.onSurfaceVariant,
+                                              color: widget
+                                                  .colorScheme.onSurfaceVariant,
                                             ),
                                           ),
                                           Text(
@@ -110,7 +133,8 @@ class PopularCategoryWidget extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.normal,
-                                              color: colorScheme.tertiary,
+                                              color:
+                                                  widget.colorScheme.tertiary,
                                             ),
                                           ),
                                           SizedBox(height: 4),
@@ -119,7 +143,7 @@ class PopularCategoryWidget extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
-                                              color: colorScheme.error,
+                                              color: widget.colorScheme.error,
                                             ),
                                           ),
                                           SizedBox(height: 8),
@@ -149,10 +173,30 @@ class CategoryWidget extends StatefulWidget {
 }
 
 class _CategoryWidgetState extends State<CategoryWidget> {
+  List<DocumentSnapshot> category = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  void fetchCategories() async {
+    CollectionReference categoryRef =
+        FirebaseFirestore.instance.collection('categories');
+    QuerySnapshot querySnapshot = await categoryRef.get();
+    setState(() {
+      category = querySnapshot.docs;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final categoryController = Get.find<CategoryControllerGetx>();
+
+    // CollectionReference categories =
+    //     FirebaseFirestore.instance.collection("categories");
+    // final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     return Expanded(
       flex: 0,
@@ -353,6 +397,7 @@ class TopBannerCards extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: Material(
+        elevation: 2,
         borderRadius: BorderRadius.circular(20),
         color: cardColor,
         child: SizedBox(
@@ -377,7 +422,7 @@ class TopBannerCards extends StatelessWidget {
                             height: 1.4,
                             letterSpacing: -0.7,
                             color: titleColor,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -386,6 +431,7 @@ class TopBannerCards extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: onPress,
                           style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(4.0),
                             backgroundColor:
                                 MaterialStateProperty.all(titleColor),
                             padding: MaterialStateProperty.all(

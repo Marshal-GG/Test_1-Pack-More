@@ -23,21 +23,4 @@ class ThemeModel {
     useMaterial3: true,
     colorScheme: darkColorScheme,
   );
-
-  // static final ThemeModel _instance = ThemeModel._internal();
-
-  // factory ThemeModel() {
-  //   return _instance;
-  // }
-
-  // ThemeModel._internal();
-
-  // // Add the necessary properties and methods to manage the theme mode
-  // var themeMode = ThemeMode.light.obs;
-
-  // void toggleTheme() {
-  //   themeMode.value =
-  //       themeMode.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-  //   update();
-  // }
 }
