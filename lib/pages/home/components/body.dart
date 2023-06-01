@@ -52,125 +52,145 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    const String baseURL = "gs://test-1-flutter.appspot.com/";
     return Expanded(
       flex: 0,
       child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: Row(
-              children: [
-                Text(
-                  'Popular Now!',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: widget.colorScheme.onBackground,
-                  ),
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {},
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Text(
-                        'View All',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: widget.colorScheme.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: GetBuilder<CategoryControllerGetx>(
-              builder: (carouselController) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: products.map((e) {
-                        int id = carouselController.categoryModelGetx.i + 1;
-                        return (e.id == id)
-                            ? GestureDetector(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 0),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    elevation: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(height: 8),
-                                          SizedBox(
-                                            height: 140,
-                                            width: 180,
-                                            child: Hero(
-                                                tag: e.name,
-                                                child: Image.network(
-                                                  e.image,
-                                                  semanticLabel: e.name,
-                                                )),
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            e.name,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: widget
-                                                  .colorScheme.onSurfaceVariant,
-                                            ),
-                                          ),
-                                          Text(
-                                            e.category,
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.normal,
-                                              color:
-                                                  widget.colorScheme.tertiary,
-                                            ),
-                                          ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            '₹ ${e.price}',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: widget.colorScheme.error,
-                                            ),
-                                          ),
-                                          SizedBox(height: 8),
-                                        ],
+        children: [buildHeader(), buildCards()],
+      ),
+    );
+  }
+
+  SingleChildScrollView buildCards() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: GetBuilder<CategoryControllerGetx>(
+        builder: (carouselController) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: products.map((e) {
+                  int id = carouselController.categoryModelGetx.i + 1;
+                  return (e.id == id)
+                      ? GestureDetector(
+                          onTap: () {},
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 0),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(height: 8),
+                                    buildImage(e),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      e.name,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            widget.colorScheme.onSurfaceVariant,
                                       ),
                                     ),
-                                  ),
+                                    Text(
+                                      e.category,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.normal,
+                                        color: widget.colorScheme.tertiary,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      '₹ ${e.price}',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: widget.colorScheme.error,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                  ],
                                 ),
-                              )
-                            : SizedBox.shrink();
-                      }).toList(),
-                    ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink();
+                }).toList(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  SizedBox buildImage(Products e) {
+    return SizedBox(
+      height: 140,
+      width: 180,
+      child: Hero(
+        tag: e.name,
+        child: FutureBuilder<String>(
+          future: getDownloadUrl(e.imageUrl),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Image.network(
+                snapshot.data!,
+                semanticLabel: e.name,
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding buildHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      child: Row(
+        children: [
+          Text(
+            'Popular Now!',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w800,
+              color: widget.colorScheme.onBackground,
+            ),
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {},
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              elevation: 2,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: widget.colorScheme.error,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              },
+                ),
+              ),
             ),
           )
         ],

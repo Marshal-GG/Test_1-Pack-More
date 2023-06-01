@@ -83,6 +83,7 @@ class FirebaseService {
         name: data['name'],
         category: data['category'],
         description: data['description'],
+        imageUrl: data['image_url'],
         image: data['image'],
         quantity: data['quantity'],
         price: data['price'],
@@ -132,6 +133,20 @@ class FirebaseService {
     return '';
   }
 }
+
+  // Future<String> getDownloadUrl(String storageLocation) async {
+  //   try {
+  //     String convertedUrl = storageLocation.replaceFirst(
+  //         'gs://', 'https://storage.googleapis.com/');
+  //     String downloadURL = await FirebaseStorage.instance
+  //         .refFromURL(convertedUrl)
+  //         .getDownloadURL();
+  //     return downloadURL;
+  //   } catch (e) {
+  //     print('Failed to get download URL: $e');
+  //     return '';
+  //   }
+  // }
 
   // Future<void> addProduct(Products product) async {
   //   await productsCollection.add({
