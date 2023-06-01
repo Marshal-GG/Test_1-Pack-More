@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controller/getx/category_controller_getx.dart';
@@ -35,6 +36,18 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
     setState(() {
       products = fetchedProducts;
     });
+  }
+
+  Future<String> getDownloadUrl(String storageLocation) async {
+    try {
+      Reference ref = FirebaseStorage.instance.refFromURL(storageLocation);
+      String downloadURL = await ref.getDownloadURL();
+      print(downloadURL);
+      return downloadURL;
+    } catch (e) {
+      print('Failed to get download URL: $e');
+      return '';
+    }
   }
 
   @override
@@ -111,12 +124,11 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
                                             height: 140,
                                             width: 180,
                                             child: Hero(
-                                              tag: e.name,
-                                              child: Image.asset(
-                                                e.image,
-                                                semanticLabel: e.name,
-                                              ),
-                                            ),
+                                                tag: e.name,
+                                                child: Image.network(
+                                                  e.image,
+                                                  semanticLabel: e.name,
+                                                )),
                                           ),
                                           SizedBox(height: 8),
                                           Text(
