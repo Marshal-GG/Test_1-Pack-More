@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:test_1/models/getx/theme_getx_model.dart';
 import '../../controller/getx/category_controller_getx.dart';
-import 'components/body.dart';
+import '../../models/getx/theme_getx_model.dart';
+import 'components/banner_card.dart';
+import 'components/category.dart';
+import 'components/popular_now.dart';
 
 class MyData {
   late final String name;
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                 CategoryWidget(),
                 PopularCategoryWidget(colorScheme: colorScheme),
                 Divider(indent: 25, endIndent: 25),
-                TopBannerCardWidget(colorScheme: colorScheme),
+                BannerCardWidget(colorScheme: colorScheme),
               ],
             ),
           )

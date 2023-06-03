@@ -3,12 +3,82 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../models/product_model.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  final CollectionReference productsCollection =
+      FirebaseFirestore.instance.collection('products');
+
+  final _googleSignIn = GoogleSignIn();
+  User? currentUser;
+  String? userName;
+  String? userEmail;
+
+  signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential authCredential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuthentication.accessToken,
+            idToken: googleSignInAuthentication.idToken);
+        await _auth.signInWithCredential(authCredential);
+        currentUser = _auth.currentUser;
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser?.uid)
+            .set({
+          "Name": currentUser?.displayName,
+          "Email": currentUser?.email,
+        }, SetOptions(merge: true));
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser?.uid)
+            .collection("Details")
+            .doc("Basic Info")
+            .set({
+          "GName": currentUser?.displayName,
+          "Email": currentUser?.email,
+          "Uid": currentUser?.uid,
+          "Photo URL": currentUser?.photoURL,
+        }, SetOptions(merge: true));
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser?.uid)
+            .collection('Details')
+            .doc('Provided Info')
+            .set({
+          "GNumber": currentUser?.phoneNumber,
+        }, SetOptions(merge: true));
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser?.uid)
+            .collection('Details')
+            .doc('Address')
+            .set({
+          "Address": "",
+          "City": "",
+          "Zipcode": "",
+        }, SetOptions(merge: true));
+      }
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      throw e;
+    }
+  }
+
+  signOut() async {
+    await _auth.signOut();
+    await _googleSignIn.signOut();
+  }
 
   // Firebase authentication methods
   Future<User?> signInWithEmailAndPassword(
@@ -41,10 +111,6 @@ class FirebaseService {
     }
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
-
   // Firestore methods
   Future<DocumentSnapshot<Map<String, dynamic>>?> getUserProfile(
       String uid) async {
@@ -70,9 +136,6 @@ class FirebaseService {
       print('Failed to update user profile: $e');
     }
   }
-
-  final CollectionReference productsCollection =
-      FirebaseFirestore.instance.collection('products');
 
   Future<List<Products>> fetchProducts() async {
     QuerySnapshot querySnapshot = await productsCollection.get();
@@ -107,32 +170,36 @@ class FirebaseService {
     }
   }
 
-  Future<List<String>> fetchImageUrls() async {
+  Future<String> getDownloadUrl(String storageLocation) async {
     try {
-      ListResult listResult = await _storage.ref().child('assests').listAll();
-      List<Reference> imageRefs = listResult.items;
-      List<String> imageUrls = [];
-      for (Reference ref in imageRefs) {
-        String downloadURL = await ref.getDownloadURL();
-        imageUrls.add(downloadURL);
-      }
-      return imageUrls;
+      Reference ref = FirebaseStorage.instance.refFromURL(storageLocation);
+      String downloadURL = await ref.getDownloadURL();
+      // print(downloadURL);
+      return downloadURL;
     } catch (e) {
-      print('Failed to fetch image URLs: $e');
-      return [];
+      print('Failed to get download URL: $e');
+      return '';
     }
   }
 
-  Future<String> getDownloadUrl(String storageLocation) async {
-  try {
-    Reference ref = FirebaseStorage.instance.refFromURL(storageLocation);
-    String downloadURL = await ref.getDownloadURL();
-    return downloadURL;
-  } catch (e) {
-    print('Failed to get download URL: $e');
-    return '';
+  Future<void> addProduct(Products product) async {
+    try {
+      String? imageUrl = await uploadImage(File(product.image));
+      if (imageUrl != null) {
+        await productsCollection.add({
+          'id': product.id,
+          'name': product.name,
+          'category': product.category,
+          'description': product.description,
+          'image': imageUrl,
+          'quantity': product.quantity,
+          'price': product.price,
+        });
+      }
+    } catch (e) {
+      print('Failed to add product: $e');
+    }
   }
-}
 
   // Future<String> getDownloadUrl(String storageLocation) async {
   //   try {
@@ -160,22 +227,19 @@ class FirebaseService {
   //   });
   // }
 
-  Future<void> addProduct(Products product) async {
-    try {
-      String? imageUrl = await uploadImage(File(product.image));
-      if (imageUrl != null) {
-        await productsCollection.add({
-          'id': product.id,
-          'name': product.name,
-          'category': product.category,
-          'description': product.description,
-          'image': imageUrl,
-          'quantity': product.quantity,
-          'price': product.price,
-        });
-      }
-    } catch (e) {
-      print('Failed to add product: $e');
-    }
-  }
+  // Future<List<String>> fetchImageUrls() async {
+  //   try {
+  //     ListResult listResult = await _storage.ref().child('assests').listAll();
+  //     List<Reference> imageRefs = listResult.items;
+  //     List<String> imageUrls = [];
+  //     for (Reference ref in imageRefs) {
+  //       String downloadURL = await ref.getDownloadURL();
+  //       imageUrls.add(downloadURL);
+  //     }
+  //     return imageUrls;
+  //   } catch (e) {
+  //     print('Failed to fetch image URLs: $e');
+  //     return [];
+  //   }
+  // }
 }

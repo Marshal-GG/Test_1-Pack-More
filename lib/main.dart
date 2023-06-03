@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_1/pages/auth_temp.dart';
 import 'core/firebase_initialize.dart';
 import 'models/getx/theme_getx_model.dart';
 import 'pages/home/home.dart';
@@ -31,7 +32,7 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeModel.lightTheme,
             darkTheme: ThemeModel.darkTheme,
             themeMode: themeProvider.themeMode,
-            home: const HomePage(),
+            home: const AuthTemp(),
           ),
         );
       },

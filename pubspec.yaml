@@ -30,10 +30,11 @@ environment:
 dependencies:
   cloud_firestore:
   firebase_storage:
-  firebase_auth: ^4.6.1 
+  firebase_auth: 
   firebase_core: ^2.13.0
   firebase_core_platform_interface:
   google_sign_in:
+  firebase_app_check:
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1
   google_fonts: 

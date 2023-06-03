@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import '../firebase_options.dart';
@@ -10,6 +11,7 @@ Future<void> initializeApp() async {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     GetIt.instance.registerSingleton<FirebaseService>(FirebaseService());
+    // await FirebaseAppCheck.instance.activate();
   } catch (e) {
     Fluttertoast.showToast(
       msg: 'Failed to initialize Firebase: $e',
