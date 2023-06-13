@@ -28,25 +28,38 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloud_firestore:
-  firebase_storage:
-  firebase_auth: 
-  firebase_core: ^2.13.0
-  firebase_core_platform_interface:
-  google_sign_in:
-  firebase_app_check:
+
+  # Cloud-related dependencies
+  cloud_firestore: # Firestore database
+  firebase_storage: # Firebase storage for file uploads
+  firebase_auth: # Firebase authentication
+  firebase_core: ^2.13.0 # Firebase core functionality
+  firebase_core_platform_interface: # Platform-specific implementations for Firebase core
+  google_sign_in: # Google sign-in authentication
+  firebase_app_check: # Firebase App Check for app verification
+  google_fonts: # Google Fonts for text styling
+
+  # State management and data handling dependencies
+  shared_preferences: # Local storage for simple key-value pairs
+  provider: # State management library
+  intl_phone_field: # Phone number input field widget
+  get: # Dependency injection library
+
+  # Design-related dependencies
+  palette_generator: # Color palette generator
+  carousel_slider: # Image carousel slider
+  dots_indicator: # Page indicator dots for carousel slider
+
+  # Input-related dependencies
+  cached_network_image: # Caching and displaying network images
+  image_picker: # Image picker for selecting images from the device
+  image_picker_ios: # iOS-specific implementation for image picker
+  fluttertoast: # Displaying toast notifications
+  get_it: # Service locator for dependency injection
+
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1
-  google_fonts: 
-  carousel_slider:
-  dots_indicator:
-  get:
-  shared_preferences:
-  provider:
-  image_picker:
-  image_picker_ios:
-  fluttertoast:
-  get_it:
+
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2

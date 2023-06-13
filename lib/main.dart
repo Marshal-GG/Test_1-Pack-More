@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_1/core/routes/router.dart';
+import 'package:test_1/core/routes/my_nav_observer.dart';
 import 'package:test_1/pages/auth_temp.dart';
 import 'core/firebase_initialize.dart';
 import 'models/getx/theme_getx_model.dart';
-import 'pages/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
             darkTheme: ThemeModel.darkTheme,
             themeMode: themeProvider.themeMode,
             home: const AuthTemp(),
+            initialRoute: '/',
+            onGenerateRoute: generateRoute,
+            navigatorObservers: [MyNavigatorObserver()],
           ),
         );
       },

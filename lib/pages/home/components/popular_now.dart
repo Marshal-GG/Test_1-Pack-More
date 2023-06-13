@@ -1,7 +1,6 @@
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/getx/category_controller_getx.dart';
 import '../../../core/firebase_services.dart';
 import '../../../models/product_model.dart';
@@ -65,14 +64,20 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
                   return (product.id == id)
                       ? GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsPage(
-                                  product: product,
-                                ),
-                              ),
+                              '/product-details-page',
+                              arguments: product,
                             );
+
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => DetailsPage(
+                            //       product: product,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Padding(
                             padding: EdgeInsets.only(left: 0),
@@ -142,9 +147,12 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
           future: firebaseService.getDownloadUrl(product.imageUrl),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Image.network(
-                snapshot.data!,
-                semanticLabel: product.name,
+              return Semantics(
+                label: product.name,
+                child: CachedNetworkImage(
+                  imageUrl: snapshot.data!,
+                  fit: BoxFit.contain,
+                ),
               );
             } else {
               return Center(

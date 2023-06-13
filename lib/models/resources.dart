@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+// ignore: unused_import
 import 'product_model.dart';
 
 CarouselController carouselController = CarouselController();

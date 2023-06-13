@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_1/core/firebase_services.dart';
-import 'package:test_1/pages/home/home.dart';
 
 class AuthTemp extends StatelessWidget {
   const AuthTemp({super.key});
@@ -14,12 +13,14 @@ class AuthTemp extends StatelessWidget {
           onPressed: () async {
             await FirebaseService().signInWithGoogle();
             // ignore: use_build_context_synchronously
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ),
-            );
+            Navigator.pushNamed(context, '/home-page');
+            // ignore: use_build_context_synchronously
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => HomePage(),
+            //   ),
+            // );
           },
           child: Text('Login'),
         ),
