@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
             darkTheme: ThemeModel.darkTheme,
             themeMode: themeProvider.themeMode,
             home: const AuthTemp(),
-            initialRoute: '/',
+            initialRoute: '/admin-console-page',
             onGenerateRoute: generateRoute,
             navigatorObservers: [MyNavigatorObserver()],
           ),
