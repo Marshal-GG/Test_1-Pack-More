@@ -57,6 +57,8 @@ dependencies:
   fluttertoast: # Displaying toast notifications
   get_it: # Service locator for dependency injection
 
+  flutter_rating_bar:
+
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1
 

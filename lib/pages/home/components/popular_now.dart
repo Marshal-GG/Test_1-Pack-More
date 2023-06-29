@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../../controller/getx/category_controller_getx.dart';
 import '../../../core/firebase_services.dart';
 import '../../../models/product_model.dart';
-import '../../details/details.dart';
 
 class PopularCategoryWidget extends StatefulWidget {
   const PopularCategoryWidget({
@@ -51,12 +50,18 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
 
   SingleChildScrollView buildCards() {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(
+        decelerationRate: ScrollDecelerationRate.fast,
+      ),
       scrollDirection: Axis.vertical,
       child: GetBuilder<CategoryControllerGetx>(
         builder: (carouselController) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
             child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(
+                decelerationRate: ScrollDecelerationRate.fast,
+              ),
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: products.map((product) {

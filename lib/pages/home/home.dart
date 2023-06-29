@@ -7,12 +7,12 @@ import 'components/banner_card.dart';
 import 'components/category.dart';
 import 'components/popular_now.dart';
 
-class MyData {
-  late final String name;
-  late final int age;
+// class MyData {
+//   late final String name;
+//   late final int age;
 
-  MyData({required this.name, required this.age});
-}
+//   MyData({required this.name, required this.age});
+// }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,36 +29,32 @@ class _HomePageState extends State<HomePage> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Column(
-        children: [
-          // Expanded(
-          //   flex: 1,
-          //   child: Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 45),
-          //     child: Align(
-          //       alignment: Alignment.center,
-          //       child: Text(
-          //         "Welcome!",
-          //         style: GoogleFonts.alata(
-          //             fontWeight: FontWeight.w900,
-          //             fontSize: 38,
-          //             color: colorScheme.onBackground),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Expanded(
-            flex: 20,
-            child: Column(
-              children: [
-                CategoryWidget(),
-                PopularCategoryWidget(colorScheme: colorScheme),
-                Divider(indent: 25, endIndent: 25),
-                BannerCardWidget(colorScheme: colorScheme),
-              ],
-            ),
-          )
-        ],
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(
+          decelerationRate: ScrollDecelerationRate.fast,
+        ),
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            CategoryWidget(),
+            PopularCategoryWidget(colorScheme: colorScheme),
+            Divider(indent: 25, endIndent: 25),
+            BannerCardWidget(colorScheme: colorScheme),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 45),
+            //   child: Align(
+            //     alignment: Alignment.center,
+            //     child: Text(
+            //       "Welcome!",
+            //       style: GoogleFonts.alata(
+            //           fontWeight: FontWeight.w900,
+            //           fontSize: 38,
+            //           color: colorScheme.onBackground),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

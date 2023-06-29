@@ -19,87 +19,92 @@ class _BannerCardWidgetState extends State<BannerCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    return Container(
-      // width: screenWidth,
-      constraints: BoxConstraints.tight(Size.fromHeight(screenHeight / 3.5)),
-      child: Column(
-        children: [
-          Expanded(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  pauseAutoPlayOnManualNavigate: true,
-                  autoPlay: true,
-                  viewportFraction: 0.8,
-                  autoPlayInterval: Duration(seconds: 4),
-                  autoPlayCurve: Curves.easeInOut,
-                  onPageChanged: ((index, _) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  })),
-              items: [
-                BannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/1.png',
-                  title: 'The Fastest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.secondaryContainer,
-                  cardColor: widget.colorScheme.secondaryContainer,
-                  titleColor: widget.colorScheme.onSecondaryContainer,
-                  onPress: () {},
-                ),
-                BannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/2.png',
-                  title: 'The Safest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.tertiaryContainer,
-                  cardColor: widget.colorScheme.tertiaryContainer,
-                  titleColor: widget.colorScheme.onTertiaryContainer,
-                  onPress: () {},
-                ),
-                BannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/3.png',
-                  title: 'The Achievement in Delivery!!',
-                  buttonTextColor: widget.colorScheme.primaryContainer,
-                  cardColor: widget.colorScheme.primaryContainer,
-                  titleColor: widget.colorScheme.onPrimaryContainer,
-                  onPress: () {},
-                ),
-                BannerCards(
-                  colorScheme: widget.colorScheme,
-                  imgurl: 'assets/images/stocks/4.png',
-                  title: 'The Hotest in Delivery!!',
-                  buttonTextColor: widget.colorScheme.errorContainer,
-                  cardColor: widget.colorScheme.errorContainer,
-                  titleColor: widget.colorScheme.onErrorContainer,
-                  onPress: () {},
-                ),
-              ],
-            ),
-          ),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            child: DotsIndicator(
-              dotsCount: 4,
-              position: _currentIndex,
-              decorator: DotsDecorator(
-                activeColor: widget.colorScheme.primary,
-                color: widget.colorScheme.onSurfaceVariant,
-                activeSize: Size(12, 12),
-                size: Size(10, 10),
-                activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                spacing: EdgeInsets.all(4),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Flexible(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    pauseAutoPlayOnManualNavigate: true,
+                    autoPlay: true,
+                    viewportFraction: 0.8,
+                    autoPlayInterval: Duration(seconds: 4),
+                    autoPlayCurve: Curves.easeInOut,
+                    onPageChanged: ((index, _) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    })),
+                items: [
+                  BannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/1.png',
+                    title: 'The Fastest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.secondaryContainer,
+                    cardColor: widget.colorScheme.secondaryContainer,
+                    titleColor: widget.colorScheme.onSecondaryContainer,
+                    onPress: () {
+                      print('The Fastest in Delivery!!');
+                    },
+                  ),
+                  BannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/2.png',
+                    title: 'The Safest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.tertiaryContainer,
+                    cardColor: widget.colorScheme.tertiaryContainer,
+                    titleColor: widget.colorScheme.onTertiaryContainer,
+                    onPress: () {
+                      print('The Safest in Delivery!!');
+                    },
+                  ),
+                  BannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/3.png',
+                    title: 'The Achievement in Delivery!!',
+                    buttonTextColor: widget.colorScheme.primaryContainer,
+                    cardColor: widget.colorScheme.primaryContainer,
+                    titleColor: widget.colorScheme.onPrimaryContainer,
+                    onPress: () {
+                      print('The Achievement in Delivery!!');
+                    },
+                  ),
+                  BannerCards(
+                    colorScheme: widget.colorScheme,
+                    imgurl: 'assets/images/stocks/4.png',
+                    title: 'The Hotest in Delivery!!',
+                    buttonTextColor: widget.colorScheme.errorContainer,
+                    cardColor: widget.colorScheme.errorContainer,
+                    titleColor: widget.colorScheme.onErrorContainer,
+                    onPress: () {
+                      print('The Hotest in Delivery!!');
+                    },
+                  ),
+                ],
               ),
             ),
+          ],
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          child: DotsIndicator(
+            dotsCount: 4,
+            position: _currentIndex,
+            decorator: DotsDecorator(
+              activeColor: widget.colorScheme.primary,
+              color: widget.colorScheme.onSurfaceVariant,
+              activeSize: Size(12, 12),
+              size: Size(10, 10),
+              activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              spacing: EdgeInsets.all(4),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -162,20 +167,31 @@ class BannerCards extends StatelessWidget {
                       Flexible(
                         child: ElevatedButton(
                           onPressed: onPress,
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(4.0),
-                            backgroundColor:
-                                MaterialStateProperty.all(titleColor),
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 4,
+                            backgroundColor: titleColor,
+                            padding: EdgeInsets.symmetric(
                               horizontal: 24,
                               vertical: 12,
-                            )),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
+                            ),
+                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
-                            )),
+                            ),
                           ),
+                          // ButtonStyle(
+                          //   elevation: MaterialStateProperty.all(4.0),
+                          //   backgroundColor:
+                          //       MaterialStateProperty.all(titleColor),
+                          //   padding: MaterialStateProperty.all(
+                          //       const EdgeInsets.symmetric(
+                          //     horizontal: 24,
+                          //     vertical: 12,
+                          //   )),
+                          //   shape: MaterialStateProperty.all(
+                          //       RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(8),
+                          //   )),
+                          // ),
                           child: Text(
                             "Order Now",
                             style: TextStyle(
