@@ -206,17 +206,6 @@ class FirebaseService {
       return [];
     }
   }
-  // Make sure you increment the page variable appropriately when calling the fetchProducts method to load the next page of products. For example:
-  // int currentPage = 1;
-  // List<Products> loadedProducts = [];
-
-  // Future<void> loadMoreProducts() async {
-  //   final List<Products> nextPageProducts =
-  //       await firebaseService.fetchProducts(currentPage);
-  //   currentPage++;
-  //   loadedProducts.addAll(nextPageProducts);
-  //   // Handle the loaded products as needed
-  // }
 
   Future<List<Products>> fetchProducts() async {
     try {
