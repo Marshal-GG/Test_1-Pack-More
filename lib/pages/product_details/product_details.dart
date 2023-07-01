@@ -30,7 +30,7 @@ class _DetailsPageState extends State<ProductDetailsPage> {
 
   void fetchImageUrl() {
     final FirebaseService firebaseService = FirebaseService();
-    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl);
+    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl!);
   }
 
   @override
@@ -205,7 +205,7 @@ In a distant village, laughter erupted from a cozy tavern, where friends gathere
 
   FutureBuilder<String> buildImage(Products product) {
     final FirebaseService firebaseService = FirebaseService();
-    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl);
+    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl!);
     return FutureBuilder<String>(
       future: _imageFuture,
       builder: (context, snapshot) {

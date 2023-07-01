@@ -140,7 +140,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
       child: Hero(
         tag: product.name,
         child: FutureBuilder<String>(
-          future: firebaseService.getDownloadUrl(product.imageUrl),
+          future: firebaseService.getDownloadUrl(product.imageUrl!),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Semantics(

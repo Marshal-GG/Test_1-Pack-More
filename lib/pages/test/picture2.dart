@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../core/firebase/firebase_services.dart';
 import '../../core/models/product_model.dart';
 
@@ -39,7 +38,8 @@ class _PictureTest2State extends State<PictureTest2> {
     // Fetch the image URL for each product
     for (var product in fetchedProducts) {
       try {
-        String imageUrl = await firebaseService.getDownloadUrl(product.image);
+        String imageUrl =
+            await firebaseService.getDownloadUrl(product.imageUrl!);
         product.setImageUrl(imageUrl);
       } catch (e) {
         print('Failed to fetch image URL: $e');
@@ -98,14 +98,17 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       // Customize the card appearance as per your needs
-      child: Column(
-        children: [
-          // Display the product details within the card
-          Image.network(product.imageUrl!),
-          Text(product.name),
-          Text(product.price.toString()),
-          // Add more details or buttons as needed
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            AspectRatio(
+                aspectRatio: 1, child: Image.network(product.imageUrl!)),
+            Text(product.name),
+            Text(product.price.toString()),
+            // Add more details or buttons as needed
+          ],
+        ),
       ),
     );
   }
