@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controller/getx/category_controller_getx.dart';
-import '../../../core/firebase_services.dart';
-import '../../../models/product_model.dart';
+import '../../../core/firebase/firebase_services.dart';
+import '../../../core/models/product_model.dart';
 
 class PopularCategoryWidget extends StatefulWidget {
   const PopularCategoryWidget({
@@ -74,15 +74,6 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
                               '/product-details-page',
                               arguments: product,
                             );
-
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => DetailsPage(
-                            //       product: product,
-                            //     ),
-                            //   ),
-                            // );
                           },
                           child: Padding(
                             padding: EdgeInsets.only(left: 0),

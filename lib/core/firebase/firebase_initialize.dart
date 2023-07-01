@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
-import '../firebase_options.dart';
+import 'firebase_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'firebase_services.dart';

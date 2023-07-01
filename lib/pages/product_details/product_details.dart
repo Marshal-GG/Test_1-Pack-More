@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../../models/product_model.dart';
-import '../../../core/firebase_services.dart';
+import '../../core/models/product_model.dart';
+import '../../core/firebase/firebase_services.dart';
 
-class DetailsPage extends StatefulWidget {
-  DetailsPage({Key? key}) : super(key: key);
+class ProductDetailsPage extends StatefulWidget {
+  ProductDetailsPage({Key? key}) : super(key: key);
   @override
   State createState() => _DetailsPageState();
 }
 
-class _DetailsPageState extends State<DetailsPage> {
+class _DetailsPageState extends State<ProductDetailsPage> {
   late Future<String> _imageFuture;
   double averageRating = 2.5;
   bool isFavorite = false;
@@ -255,15 +255,15 @@ In a distant village, laughter erupted from a cozy tavern, where friends gathere
   }
 }
 
-// class DetailsPage extends StatefulWidget {
+// class ProductDetailsPage extends StatefulWidget {
 
-//   const DetailsPage({super.key, required Products product});
+//   const ProductDetailsPage({super.key, required Products product});
 
 //   @override
-//   State<DetailsPage> createState() => _DetailsPageState();
+//   State<ProductDetailsPage> createState() => _DetailsPageState();
 // }
 
-// class _DetailsPageState extends State<DetailsPage> {
+// class _DetailsPageState extends State<ProductDetailsPage> {
 //   @override
 //   Widget build(BuildContext context) {
 //     final colorScheme = Theme.of(context).colorScheme;

@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+// Importing the necessary controller and model files
 import '../../controller/getx/category_controller_getx.dart';
-import '../../models/getx/theme_getx_model.dart';
+import '../../core/models/theme_model.dart';
+
+// Importing the custom components
 import 'components/banner_card.dart';
 import 'components/category.dart';
 import 'components/popular_now.dart';
 
-// class MyData {
-//   late final String name;
-//   late final int age;
-
-//   MyData({required this.name, required this.age});
-// }
-
+// Homepage widget
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,13 +20,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // Creating an instance of the CategoryControllerGetx
   final CategoryControllerGetx categoryController =
       Get.put(CategoryControllerGetx());
+
   @override
   Widget build(BuildContext context) {
+    // Getting the color scheme from the current theme
     final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context), // Building the custom app bar
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(
           decelerationRate: ScrollDecelerationRate.fast,
@@ -36,10 +38,11 @@ class _HomePageState extends State<HomePage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            CategoryWidget(),
-            PopularCategoryWidget(colorScheme: colorScheme),
-            Divider(indent: 25, endIndent: 25),
-            BannerCardWidget(colorScheme: colorScheme),
+            CategoryWidget(), // Displaying the categories
+            PopularCategoryWidget(colorScheme: colorScheme), // Displaying popular categories
+            Divider(indent: 25, endIndent: 25), // Adding a divider
+            BannerCardWidget(colorScheme: colorScheme), // Displaying a banner card
+
             // Padding(
             //   padding: EdgeInsets.symmetric(horizontal: 45),
             //   child: Align(
@@ -59,9 +62,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Building the custom app bar
   AppBar buildAppBar(BuildContext context) {
+    // Getting the color scheme from the current theme
     final colorScheme = Theme.of(context).colorScheme;
+
+    // Getting the theme provider from the Provider
     final themeProvider = Provider.of<ThemeProvider>(context);
+
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -74,6 +82,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {},
       ),
       actions: [
+        // Shopping cart button
         Padding(
           padding: EdgeInsets.all(12),
           child: SizedBox(
@@ -95,6 +104,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+
+        // Dark mode toggle button
         Padding(
           padding: EdgeInsets.all(12),
           child: SizedBox(

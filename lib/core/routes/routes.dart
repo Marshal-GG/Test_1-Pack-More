@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_1/pages/auth_temp.dart';
-import 'package:test_1/pages/details/details.dart';
+import 'package:test_1/pages/product_details/product_details.dart';
 import 'package:test_1/pages/home/home.dart';
 import 'package:test_1/pages/test/picture.dart';
 
@@ -18,7 +18,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/product-details-page':
       return MaterialPageRoute(
-        builder: (_) => DetailsPage(),
+        builder: (_) => ProductDetailsPage(),
         settings: settings,
       );
     case '/picture-test-page':

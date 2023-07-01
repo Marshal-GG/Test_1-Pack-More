@@ -7,8 +7,6 @@ class Products {
   final String description;
   final int quantity;
   final int price;
-  
-  
 
   Products({
     required this.id,
