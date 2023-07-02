@@ -24,6 +24,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/picture-test-page':
       return MaterialPageRoute(
+        builder: (_) => PictureTest(),
+        settings: settings,
+      );
+    case '/picture2-test-page':
+      return MaterialPageRoute(
         builder: (_) => PictureTest2(),
         settings: settings,
       );

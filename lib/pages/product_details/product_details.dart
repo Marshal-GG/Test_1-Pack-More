@@ -11,31 +11,15 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<ProductDetailsPage> {
-  late Future<String> _imageFuture;
+  final FirebaseService firebaseService = FirebaseService();
+  late Products product;
   double averageRating = 2.5;
   bool isFavorite = false;
-  late Products product;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    product = ModalRoute.of(context)!.settings.arguments as Products;
-    fetchImageUrl();
-  }
-
-  void fetchImageUrl() {
-    final FirebaseService firebaseService = FirebaseService();
-    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl!);
-  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    product = ModalRoute.of(context)!.settings.arguments as Products;
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: AppBar(
@@ -47,7 +31,16 @@ class _DetailsPageState extends State<ProductDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildImage(product),
+            Hero(
+              tag: product.name,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: CachedNetworkImage(
+                  imageUrl: product.imageUrl!,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -202,116 +195,4 @@ In a distant village, laughter erupted from a cozy tavern, where friends gathere
       ),
     );
   }
-
-  FutureBuilder<String> buildImage(Products product) {
-    final FirebaseService firebaseService = FirebaseService();
-    _imageFuture = firebaseService.getDownloadUrl(product.imageUrl!);
-    return FutureBuilder<String>(
-      future: _imageFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return AspectRatio(
-              aspectRatio: 1,
-              child: GestureDetector(
-                // fix it later
-
-                // onScaleUpdate: (ScaleUpdateDetails details) {
-                //   setState(() {
-                //     scaleFactor = details.scale.clamp(1.0, 5.0);
-                //   });
-                // },
-                child: Hero(
-                  tag: product.name,
-                  child: Semantics(
-                    label: product.name,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.black.withOpacity(0.5),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(snapshot.data!),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Icon(Icons.error);
-          }
-        }
-        return SizedBox(
-          child: Center(
-            child: snapshot.connectionState == ConnectionState.waiting
-                ? CircularProgressIndicator()
-                : Text('No image available'),
-          ),
-        );
-      },
-    );
-  }
 }
-
-// class ProductDetailsPage extends StatefulWidget {
-
-//   const ProductDetailsPage({super.key, required Products product});
-
-//   @override
-//   State<ProductDetailsPage> createState() => _DetailsPageState();
-// }
-
-// class _DetailsPageState extends State<ProductDetailsPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final colorScheme = Theme.of(context).colorScheme;
-//     // Products e = ModalRoute.of(context)!.settings.arguments as Products;
-//     return Scaffold(
-//       appBar: AppBar(),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             flex: 2,
-//             child: Container(
-//               decoration: BoxDecoration(
-//                 color: colorScheme.onSurface,
-//                 borderRadius: const BorderRadius.only(
-//                   topLeft: Radius.circular(60),
-//                   topRight: Radius.circular(60),
-//                 ),
-//                 boxShadow: [
-//                   BoxShadow(
-//                       color: colorScheme.shadow,
-//                       offset: Offset(-2, -3),
-//                       blurRadius: 12)
-//                 ],
-//               ),
-//               child: Stack(
-//                 children: [
-//                   Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       SizedBox(height: 80),
-//                       Spacer(flex: 8),
-//                       Padding(
-//                         padding: EdgeInsets.symmetric(
-//                           vertical: 5,
-//                           horizontal: 20,
-//                         ),
-//                       )
-//                     ],
-//                   )
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../core/firebase/firebase_services.dart';
 import '../../core/models/product_model.dart';
@@ -35,23 +36,32 @@ class _PictureTest2State extends State<PictureTest2> {
     List<Products> fetchedProducts =
         await firebaseService.fetchProductsByPages(page);
 
-    // Fetch the image URL for each product
-    for (var product in fetchedProducts) {
-      try {
-        String imageUrl =
-            await firebaseService.getDownloadUrl(product.imageUrl!);
-        product.setImageUrl(imageUrl);
-      } catch (e) {
-        print('Failed to fetch image URL: $e');
-        product.setImageUrl('');
-      }
-    }
+    await fetchProductImageUrls(fetchedProducts);
 
     setState(() {
       products.addAll(fetchedProducts); // Add fetched products to the list
       isLoading = false;
       page++;
     });
+  }
+
+  Future<void> fetchProductImageUrls(List<Products> products) async {
+    List<Future<String?>> imageFetchingFutures = [];
+
+    for (var product in products) {
+      if (product.imageUrl != null) {
+        imageFetchingFutures
+            .add(firebaseService.getDownloadUrl(product.imageUrl!));
+      }
+    }
+
+    List<String?> imageUrls = await Future.wait(imageFetchingFutures);
+
+    for (int i = 0; i < products.length; i++) {
+      if (products[i].imageUrl != null && i < imageUrls.length) {
+        products[i].setImageUrl(imageUrls[i] ?? '');
+      }
+    }
   }
 
   void scrollListener() {
@@ -64,27 +74,34 @@ class _PictureTest2State extends State<PictureTest2> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      controller: scrollController,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.7),
-      itemCount: products.length + 1,
-      itemBuilder: (context, index) {
-        if (index < products.length) {
-          // Render your product card widget
-          return ProductCard(products[index]);
-        } else {
-          // Reached the end of the list, show a loading indicator
-          if (isLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return SizedBox.shrink(); // Return an empty widget if not loading
-          }
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          controller: scrollController,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.7),
+          itemCount: products.length + 1,
+          itemBuilder: (context, index) {
+            if (index < products.length) {
+              // Render your product card widget
+              return ProductCard(products[index]);
+            } else {
+              // Reached the end of the list, show a loading indicator
+              if (isLoading) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return SizedBox
+                    .shrink(); // Return an empty widget if not loading
+              }
+            }
+          },
+        ),
+      ),
     );
   }
 }
@@ -97,13 +114,13 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      // Customize the card appearance as per your needs
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             AspectRatio(
-                aspectRatio: 1, child: Image.network(product.imageUrl!)),
+                aspectRatio: 1,
+                child: CachedNetworkImage(imageUrl: product.imageUrl!)),
             Text(product.name),
             Text(product.price.toString()),
             // Add more details or buttons as needed

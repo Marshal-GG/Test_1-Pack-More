@@ -30,9 +30,30 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
   void fetchProducts() async {
     List<Products> fetchedProducts = await firebaseService.fetchProducts();
 
+    await fetchProductImageUrls(fetchedProducts);
+
     setState(() {
-      products = fetchedProducts;
+      products.addAll(fetchedProducts);
     });
+  }
+
+  Future<void> fetchProductImageUrls(List<Products> products) async {
+    List<Future<String?>> imageFetchingFutures = [];
+
+    for (var product in products) {
+      if (product.imageUrl != null) {
+        imageFetchingFutures
+            .add(firebaseService.getDownloadUrl(product.imageUrl!));
+      }
+    }
+
+    List<String?> imageUrls = await Future.wait(imageFetchingFutures);
+
+    for (int i = 0; i < products.length; i++) {
+      if (products[i].imageUrl != null && i < imageUrls.length) {
+        products[i].setImageUrl(imageUrls[i] ?? '');
+      }
+    }
   }
 
   @override
@@ -138,26 +159,14 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
       height: 140,
       width: 180,
       child: Hero(
-        tag: product.name,
-        child: FutureBuilder<String>(
-          future: firebaseService.getDownloadUrl(product.imageUrl!),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Semantics(
-                label: product.name,
-                child: CachedNetworkImage(
-                  imageUrl: snapshot.data!,
-                  fit: BoxFit.contain,
-                ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      ),
+          tag: product.name,
+          child: Semantics(
+            label: product.name,
+            child: CachedNetworkImage(
+              imageUrl: product.imageUrl!,
+              fit: BoxFit.contain,
+            ),
+          )),
     );
   }
 
@@ -176,7 +185,12 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
           ),
           Spacer(),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/picture2-test-page',
+              );
+            },
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
