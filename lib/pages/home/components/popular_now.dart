@@ -20,6 +20,7 @@ class PopularCategoryWidget extends StatefulWidget {
 class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
   FirebaseService firebaseService = FirebaseService();
   List<Products> products = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -27,37 +28,35 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
     fetchProducts();
   }
 
-  void fetchProducts() async {
+  Future<void> fetchProducts() async {
     List<Products> fetchedProducts = await firebaseService.fetchProducts();
-
-    await fetchProductImageUrls(fetchedProducts);
 
     setState(() {
       products.addAll(fetchedProducts);
+      isLoading = false;
     });
+
+    await fetchProductImageUrls(fetchedProducts);
   }
 
   Future<void> fetchProductImageUrls(List<Products> products) async {
-    List<Future<String?>> imageFetchingFutures = [];
-
     for (var product in products) {
       if (product.imageUrl != null) {
-        imageFetchingFutures
-            .add(firebaseService.getDownloadUrl(product.imageUrl!));
-      }
-    }
-
-    List<String?> imageUrls = await Future.wait(imageFetchingFutures);
-
-    for (int i = 0; i < products.length; i++) {
-      if (products[i].imageUrl != null && i < imageUrls.length) {
-        products[i].setImageUrl(imageUrls[i] ?? '');
+        String? imageUrl =
+            await firebaseService.getDownloadUrl(product.imageUrl!);
+        setState(() {
+          product.setImageUrl(imageUrl);
+        });
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+     if (isLoading) {
+      // Show a loading indicator or placeholder while fetching products
+      return Center(child: CircularProgressIndicator());
+    }
     return Expanded(
       flex: 0,
       child: Column(
@@ -159,14 +158,17 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
       height: 140,
       width: 180,
       child: Hero(
-          tag: product.name,
-          child: Semantics(
-            label: product.name,
-            child: CachedNetworkImage(
-              imageUrl: product.imageUrl!,
-              fit: BoxFit.contain,
-            ),
-          )),
+        tag: product.name,
+        child: Semantics(
+          label: product.name,
+          child: CachedNetworkImage(
+            imageUrl: product.imageUrl!,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) =>
+                Center(child: CircularProgressIndicator.adaptive()),
+          ),
+        ),
+      ),
     );
   }
 

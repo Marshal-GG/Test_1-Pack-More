@@ -26,18 +26,16 @@ class _MyAppState extends State<MyApp> {
       create: (context) => ThemeProvider(),
       builder: (context, child) {
         final themeProvider = Provider.of<ThemeProvider>(context);
-        return SafeArea(
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeModel.lightTheme,
-            darkTheme: ThemeModel.darkTheme,
-            themeMode: themeProvider.themeMode,
-            home: const AuthTemp(),
-            initialRoute: '/',
-            onGenerateRoute: generateRoute,
-            navigatorObservers: [MyNavigatorObserver()],
-          ),
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeModel.lightTheme,
+          darkTheme: ThemeModel.darkTheme,
+          themeMode: themeProvider.themeMode,
+          home: const AuthTemp(),
+          initialRoute: '/',
+          onGenerateRoute: generateRoute,
+          navigatorObservers: [MyNavigatorObserver()],
         );
       },
     );

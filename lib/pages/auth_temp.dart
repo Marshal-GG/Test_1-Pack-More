@@ -10,9 +10,8 @@ class AuthTemp extends StatelessWidget {
       appBar: AppBar(),
       body: Center(
         child: ElevatedButton(
-          onPressed: () async {
-            await FirebaseService().signInWithGoogle();
-            // ignore: use_build_context_synchronously
+          onPressed: () {
+            FirebaseService().signInWithGoogle();
             Navigator.pushNamed(context, '/home-page');
             // ignore: use_build_context_synchronously
             // Navigator.push(

@@ -17,10 +17,12 @@ class ThemeModel {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     useMaterial3: true,
     colorScheme: lightColorScheme,
+    brightness: Brightness.light,
   );
   static final darkTheme = ThemeData(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     useMaterial3: true,
     colorScheme: darkColorScheme,
+    brightness: Brightness.dark,
   );
 }

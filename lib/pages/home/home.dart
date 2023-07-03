@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
-// Importing the necessary controller and model files
 import '../../controller/getx/category_controller_getx.dart';
 import '../../core/models/theme_model.dart';
-
-// Importing the custom components
 import 'components/banner_card.dart';
 import 'components/category.dart';
 import 'components/popular_now.dart';
 
-// Homepage widget
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -26,11 +21,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Getting the color scheme from the current theme
     final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
-      appBar: buildAppBar(context), // Building the custom app bar
+      appBar: buildAppBar(context),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(
           decelerationRate: ScrollDecelerationRate.fast,
@@ -38,10 +31,10 @@ class _HomePageState extends State<HomePage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            CategoryWidget(), // Displaying the categories
-            PopularCategoryWidget(colorScheme: colorScheme), // Displaying popular categories
-            Divider(indent: 25, endIndent: 25), // Adding a divider
-            BannerCardWidget(colorScheme: colorScheme), // Displaying a banner card
+            CategoryWidget(),
+            PopularCategoryWidget(colorScheme: colorScheme),
+            Divider(indent: 25, endIndent: 25),
+            BannerCardWidget(colorScheme: colorScheme),
 
             // Padding(
             //   padding: EdgeInsets.symmetric(horizontal: 45),
@@ -62,14 +55,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Building the custom app bar
   AppBar buildAppBar(BuildContext context) {
-    // Getting the color scheme from the current theme
     final colorScheme = Theme.of(context).colorScheme;
-
-    // Getting the theme provider from the Provider
     final themeProvider = Provider.of<ThemeProvider>(context);
-
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
