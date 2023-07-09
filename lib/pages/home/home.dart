@@ -70,6 +70,31 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {},
       ),
       actions: [
+        //add product button
+        Padding(
+          padding: EdgeInsets.all(12),
+          child: SizedBox(
+            width: 33,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.inventory_2,
+                  size: 17.5,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add-product-page');
+                },
+              ),
+            ),
+          ),
+        ),
+
         // Shopping cart button
         Padding(
           padding: EdgeInsets.all(12),

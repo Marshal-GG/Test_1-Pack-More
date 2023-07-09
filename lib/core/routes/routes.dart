@@ -5,6 +5,7 @@ import 'package:test_1/pages/product_details/product_details.dart';
 import 'package:test_1/pages/home/home.dart';
 import 'package:test_1/pages/test/picture.dart';
 import 'package:test_1/pages/test/picture2.dart';
+import 'package:test_1/pages/vendor_console/vendor_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -36,6 +37,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/picture2-test-page':
       return MaterialPageRoute(
         builder: (_) => PictureTest2(),
+        settings: settings,
+      );
+      case '/vendor-page':
+      return MaterialPageRoute(
+        builder: (_) => VendorPage(),
         settings: settings,
       );
 
