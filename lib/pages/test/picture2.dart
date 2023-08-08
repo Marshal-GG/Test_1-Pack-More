@@ -15,7 +15,7 @@ class _PictureTest2State extends State<PictureTest2> {
   List<Products> products = [];
   int page = 1;
   ScrollController scrollController = ScrollController();
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -24,42 +24,27 @@ class _PictureTest2State extends State<PictureTest2> {
     scrollController.addListener(scrollListener); // Add scroll listener
   }
 
-  void fetchProducts() async {
-    if (isLoading) {
-      return; // Return early if a fetch operation is already in progress
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
+  Future<void> fetchProducts() async {
     List<Products> fetchedProducts =
         await firebaseService.fetchProductsByPages(page);
-
-    await fetchProductImageUrls(fetchedProducts);
 
     setState(() {
       products.addAll(fetchedProducts); // Add fetched products to the list
       isLoading = false;
       page++;
     });
+
+    await fetchProductImageUrls(fetchedProducts);
   }
 
   Future<void> fetchProductImageUrls(List<Products> products) async {
-    List<Future<String?>> imageFetchingFutures = [];
-
     for (var product in products) {
       if (product.imageUrl != null) {
-        imageFetchingFutures
-            .add(firebaseService.getDownloadUrl(product.imageUrl!));
-      }
-    }
-
-    List<String?> imageUrls = await Future.wait(imageFetchingFutures);
-
-    for (int i = 0; i < products.length; i++) {
-      if (products[i].imageUrl != null && i < imageUrls.length) {
-        products[i].setImageUrl(imageUrls[i] ?? '');
+        String? imageUrl =
+            await firebaseService.getDownloadUrl(product.imageUrl!);
+        setState(() {
+          product.setImageUrl(imageUrl);
+        });
       }
     }
   }
@@ -74,6 +59,10 @@ class _PictureTest2State extends State<PictureTest2> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      // Show a loading indicator or placeholder while fetching products
+      return Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -81,24 +70,19 @@ class _PictureTest2State extends State<PictureTest2> {
         child: GridView.builder(
           controller: scrollController,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 0.7),
+            crossAxisCount: 2,
+            mainAxisSpacing: 3,
+            crossAxisSpacing: 3,
+            childAspectRatio: MediaQuery.of(context).size.width /
+                (MediaQuery.of(context).size.height / 1.45),
+          ),
           itemCount: products.length + 1,
           itemBuilder: (context, index) {
             if (index < products.length) {
               // Render your product card widget
               return ProductCard(products[index]);
-            } else {
-              // Reached the end of the list, show a loading indicator
-              if (isLoading) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return SizedBox
-                    .shrink(); // Return an empty widget if not loading
-              }
             }
+            return null;
           },
         ),
       ),
@@ -113,18 +97,62 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            AspectRatio(
-                aspectRatio: 1,
-                child: CachedNetworkImage(imageUrl: product.imageUrl!)),
-            Text(product.name),
-            Text(product.price.toString()),
-            // Add more details or buttons as needed
-          ],
+    final colorScheme = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/product-details-page',
+          arguments: product,
+        );
+      },
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 8),
+              buildImage(),
+              SizedBox(height: 8),
+              Text(
+                product.name,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.tertiary,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                '₹ ${product.price}',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.error,
+                ),
+              ),
+              SizedBox(height: 8),
+              // Add more details or buttons as needed
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  AspectRatio buildImage() {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Hero(
+        tag: product.name,
+        child: CachedNetworkImage(
+          imageUrl: product.imageUrl!,
+          fit: BoxFit.contain,
+          errorWidget: (context, url, error) =>
+              Center(child: CircularProgressIndicator.adaptive()),
         ),
       ),
     );

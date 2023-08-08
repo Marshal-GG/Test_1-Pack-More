@@ -54,6 +54,7 @@ dependencies:
   cached_network_image: # Caching and displaying network images
   image_picker: # Image picker for selecting images from the device
   image_picker_ios: # iOS-specific implementation for image picker
+  image_cropper:
   fluttertoast: # Displaying toast notifications
   get_it: # Service locator for dependency injection
 

@@ -164,13 +164,14 @@ In a distant village, laughter erupted from a cozy tavern, where friends gathere
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: ElevatedButton(
+                  child: FilledButton(
                     onPressed: () {
                       // Handle add to cart button click
                     },
-                    style: ElevatedButton.styleFrom(
+                    style: FilledButton.styleFrom(
                       elevation: 4,
                       backgroundColor: colorScheme.primaryContainer,
+                      foregroundColor: colorScheme.onPrimaryContainer,
                       padding: EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

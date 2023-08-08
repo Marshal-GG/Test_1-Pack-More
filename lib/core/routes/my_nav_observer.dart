@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+
+import '../models/drawer_selection_model.dart';
 
 class MyNavigatorObserver extends NavigatorObserver {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -9,6 +12,13 @@ class MyNavigatorObserver extends NavigatorObserver {
     super.didPush(route, previousRoute);
     String routeName = _getRouteName(route);
     print('Pushed route: $routeName');
+    // if (routeName.isNotEmpty) {
+    //   // Update selected item in the drawer based on the pushed route
+    //   final drawerSelectionState = Provider.of<DrawerSelectionState>(
+    //       route.navigator!.context,
+    //       listen: false);
+    //   drawerSelectionState.setSelectedItem(routeName);
+    // }
     String? currentUserID = _getCurrentUserID();
     if (currentUserID != null && _isProtectedRoute(routeName)) {
       print('User $currentUserID accessed a protected route.');

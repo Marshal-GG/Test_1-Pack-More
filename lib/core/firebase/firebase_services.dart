@@ -185,7 +185,6 @@ class FirebaseService {
           category: data['category'],
           description: data['description'],
           imageUrl: data['image_url'],
-          image: data['image'],
           quantity: data['quantity'],
           price: data['price'],
         );
@@ -218,7 +217,6 @@ class FirebaseService {
           category: data['category'],
           description: data['description'],
           imageUrl: data['image_url'],
-          image: data['image'],
           quantity: data['quantity'],
           price: data['price'],
         );
@@ -262,14 +260,14 @@ class FirebaseService {
 
   Future<void> addProduct(Products product) async {
     try {
-      final String? imageUrl = await uploadImage(File(product.image));
+      final String? imageUrl = await uploadImage(File(product.imageUrl!));
       if (imageUrl != null) {
         await productsCollection.add({
           'id': product.id,
           'name': product.name,
           'category': product.category,
           'description': product.description,
-          'image': imageUrl,
+          'image_url': imageUrl,
           'quantity': product.quantity,
           'price': product.price,
         });

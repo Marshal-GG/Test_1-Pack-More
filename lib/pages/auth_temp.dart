@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:test_1/core/firebase/firebase_services.dart';
 
 class AuthTemp extends StatelessWidget {
@@ -9,11 +10,21 @@ class AuthTemp extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            FirebaseService().signInWithGoogle();
-            Navigator.pushNamed(context, '/home-page');
-            // ignore: use_build_context_synchronously
+        child: OutlinedButton(
+          onPressed: () async {
+            try {
+              await FirebaseService().signInWithGoogle();
+              // ignore: use_build_context_synchronously
+              Navigator.pushNamed(context, '/home-page');
+            } catch (e) {
+              Fluttertoast.showToast(
+                msg: 'Error signing in with Google: $e',
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+              );
+            }
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(

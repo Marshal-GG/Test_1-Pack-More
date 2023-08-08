@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:test_1/core/widgets/dot_divider.dart';
 import '../../../controller/getx/category_controller_getx.dart';
 import '../../../core/firebase/firebase_services.dart';
 import '../../../core/models/product_model.dart';
@@ -21,6 +23,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
   FirebaseService firebaseService = FirebaseService();
   List<Products> products = [];
   bool isLoading = true;
+  double averageRating = 2.5;
 
   @override
   void initState() {
@@ -53,10 +56,6 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-     if (isLoading) {
-      // Show a loading indicator or placeholder while fetching products
-      return Center(child: CircularProgressIndicator());
-    }
     return Expanded(
       flex: 0,
       child: Column(
@@ -98,47 +97,70 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 0),
                             child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               elevation: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(height: 8),
-                                    buildImage(product),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      product.name,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            widget.colorScheme.onSurfaceVariant,
-                                      ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  buildImage(product),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    product.name,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          widget.colorScheme.onSurfaceVariant,
                                     ),
-                                    Text(
-                                      product.category,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.normal,
-                                        color: widget.colorScheme.tertiary,
+                                  ),
+                                  Row(
+                                    children: [
+                                      RatingBar.builder(
+                                        ignoreGestures: true,
+                                        initialRating: averageRating,
+                                        minRating: 0,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 16.0,
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          print(rating);
+                                        },
                                       ),
+                                      DotDivider(),
+                                      Text(
+                                        '4.5k',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  // Text(
+                                  //   product.category,
+                                  //   style: TextStyle(
+                                  //     fontSize: 10,
+                                  //     fontWeight: FontWeight.normal,
+                                  //     color: widget.colorScheme.tertiary,
+                                  //   ),
+                                  // ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '₹ ${product.price}',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: widget.colorScheme.error,
                                     ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '₹ ${product.price}',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: widget.colorScheme.error,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(height: 8),
+                                ],
                               ),
                             ),
                           ),
@@ -153,7 +175,11 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
     );
   }
 
-  SizedBox buildImage(Products product) {
+  SingleChildRenderObjectWidget buildImage(Products product) {
+    if (isLoading) {
+      // Show a loading indicator or placeholder while fetching products
+      return Center(child: CircularProgressIndicator());
+    }
     return SizedBox(
       height: 140,
       width: 180,
@@ -163,7 +189,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
           label: product.name,
           child: CachedNetworkImage(
             imageUrl: product.imageUrl!,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
             errorWidget: (context, url, error) =>
                 Center(child: CircularProgressIndicator.adaptive()),
           ),
@@ -180,7 +206,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
           Text(
             'Popular Now!',
             style: TextStyle(
-              fontSize: 30,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
               color: widget.colorScheme.onBackground,
             ),

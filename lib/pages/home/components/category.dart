@@ -40,20 +40,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
       child: Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 8),
         child: Column(
-          children: [
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            //   child: Align(
-            //     alignment: Alignment.centerLeft,
-            //     child: Text(
-            //       "Categories",
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.w800,
-            //         fontSize: 23,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+          children: [      
             Hero(
               tag: "category",
               child: SingleChildScrollView(
