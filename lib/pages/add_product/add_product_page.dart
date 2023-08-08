@@ -77,8 +77,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Provider.of<DrawerSelectionState>(context, listen: false)
-    //     .setSelectedItem('Add-Product');
     return Consumer<DrawerSelectionState>(
       builder: (context, drawerSelection, child) {
         final colorScheme = Theme.of(context).colorScheme;

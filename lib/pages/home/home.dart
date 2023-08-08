@@ -64,9 +64,6 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-
-    Provider.of<DrawerSelectionState>(context, listen: false)
-        .setSelectedItem('Home');
   }
 
   AppBar buildAppBar(BuildContext context) {

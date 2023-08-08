@@ -24,7 +24,7 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
           child: SingleChildScrollView(
               child: Column(
             children: [
-              Divider(),
+              // Divider(),
               Text(
                 'Pack More',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -40,13 +40,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.home_outlined),
                 title: 'Home',
-                selectedItemName: selectedItem == 'Home',
+                selectedItemName: selectedItem == '/home-page',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Home') {
-                    drawerSelectionState.setSelectedItem('Home');
+                  if (drawerSelectionState.selectedItem != '/home-page') {
+                    drawerSelectionState.setSelectedItem('/home-page');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/home-page');
                   } else {
@@ -57,13 +57,14 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.shopping_cart_outlined),
                 title: 'Shopping Cart',
-                selectedItemName: selectedItem == 'Shopping-Cart',
+                selectedItemName: selectedItem == '/shopping-cart-page',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Shopping-Cart') {
-                    drawerSelectionState.setSelectedItem('Shopping-Cart');
+                  if (drawerSelectionState.selectedItem !=
+                      '/shopping-cart-page') {
+                    drawerSelectionState.setSelectedItem('/shopping-cart-page');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/shopping-cart-page');
                   } else {
@@ -74,13 +75,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.inventory_outlined),
                 title: 'Orders',
-                selectedItemName: selectedItem == 'Orders',
+                selectedItemName: selectedItem == '/Orders',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Orders') {
-                    drawerSelectionState.setSelectedItem('Orders');
+                  if (drawerSelectionState.selectedItem != '/Orders') {
+                    drawerSelectionState.setSelectedItem('/Orders');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/Orders');
                   } else {
@@ -91,13 +92,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.person_outline),
                 title: 'Profile',
-                selectedItemName: selectedItem == 'Profile',
+                selectedItemName: selectedItem == '/profile',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Profile') {
-                    drawerSelectionState.setSelectedItem('Profile');
+                  if (drawerSelectionState.selectedItem != '/profile') {
+                    drawerSelectionState.setSelectedItem('/profile');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/profile');
                   } else {
@@ -118,14 +119,15 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
                   ),
                   onTap: () {
                     Provider.of<DrawerSelectionState>(context, listen: false)
-                        .setSelectedItem('Add-Product');
+                        .setSelectedItem('/add-product-page');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/add-product-page');
                   },
-                  selected: selectedItem == 'Add-Product',
+                  selected: selectedItem == '/add-product-page',
                   enableFeedback: true,
                   selectedColor: colorScheme.onSurface,
-                  selectedTileColor: colorScheme.surfaceVariant,
+                  selectedTileColor:
+                      colorScheme.surfaceVariant.withOpacity(0.6),
                   dense: true,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -139,13 +141,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.settings_outlined),
                 title: 'Settings',
-                selectedItemName: selectedItem == 'Settings',
+                selectedItemName: selectedItem == '/settings',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Settings') {
-                    drawerSelectionState.setSelectedItem('Settings');
+                  if (drawerSelectionState.selectedItem != '/settings') {
+                    drawerSelectionState.setSelectedItem('/settings');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/settings');
                   } else {
@@ -156,13 +158,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.help_outline),
                 title: 'Help & feedback',
-                selectedItemName: selectedItem == 'Help & feedback',
+                selectedItemName: selectedItem == '/Help & feedback',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Help & feedback') {
-                    drawerSelectionState.setSelectedItem('Help & feedback');
+                  if (drawerSelectionState.selectedItem != '/Help & feedback') {
+                    drawerSelectionState.setSelectedItem('/Help & feedback');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/Help & feedback');
                   } else {
@@ -174,13 +176,13 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.logout_outlined),
                 title: 'Logout',
-                selectedItemName: selectedItem == 'Logout',
+                selectedItemName: selectedItem == '/Logout',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != 'Logout') {
-                    drawerSelectionState.setSelectedItem('Logout');
+                  if (drawerSelectionState.selectedItem != '/Logout') {
+                    drawerSelectionState.setSelectedItem('/Logout');
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/Logout');
                   } else {
@@ -228,7 +230,7 @@ class CustomDrawerItems extends StatelessWidget {
         selected: selectedItemName,
         enableFeedback: true,
         selectedColor: colorScheme.onSurface,
-        selectedTileColor: colorScheme.surfaceVariant,
+        selectedTileColor: colorScheme.surfaceVariant.withOpacity(0.6),
         dense: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
