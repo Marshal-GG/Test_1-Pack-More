@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
+import 'package:test_1/pages/add_product/components/add_multiple_images.dart';
 
 import '../../core/models/drawer_selection_model.dart';
 
@@ -37,7 +38,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Future<void> _getImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image == null) return;
     XFile? croppedImage = await _cropImage(imageFile: image);
@@ -84,6 +85,7 @@ class _AddProductPageState extends State<AddProductPage> {
         return Scaffold(
           appBar: buildAppBar(),
           body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Form(
@@ -271,6 +273,30 @@ class _AddProductPageState extends State<AddProductPage> {
                       ],
                     ),
                     SizedBox(height: 24.0),
+                    ListTile(
+                      trailing: Icon(Icons.close),
+                      dense: true,
+                      leading: Icon(Icons.add_shopping_cart_outlined),
+                      title: Expanded(
+                        child: TextFormField(
+                          controller: _quantityController,
+                          decoration: InputDecoration(
+                            labelText: 'Quantity 2',
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            alignLabelWithHint: true,
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a quantity';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    )
+                    // AddMultipleImages()
                   ],
                 ),
               ),
