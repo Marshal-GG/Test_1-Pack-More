@@ -113,36 +113,6 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
                 child: ListTile(
                   leading: Icon(Icons.inventory_2_outlined),
                   title: Text(
-                    'Add Multiple Images',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  onTap: () {
-                    Provider.of<DrawerSelectionState>(context, listen: false)
-                        .setSelectedItem('/add-multiple-images-page');
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/add-multiple-images-page');
-                  },
-                  selected: selectedItem == '/add-multiple-images-page',
-                  enableFeedback: true,
-                  selectedColor: colorScheme.onSurface,
-                  selectedTileColor:
-                      colorScheme.surfaceVariant.withOpacity(0.6),
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(64),
-                      bottomRight: Radius.circular(64),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: ListTile(
-                  leading: Icon(Icons.inventory_2_outlined),
-                  title: Text(
                     'Add Product',
                     style: TextStyle(
                       fontSize: 16.0,

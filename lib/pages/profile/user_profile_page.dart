@@ -196,7 +196,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 40, right: 0),
-                    // leading: Icon(Icons.add_shopping_cart_outlined),
                     title: Column(
                       children: [
                         TextFormField(
@@ -336,10 +335,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
               case 'Option 1':
                 // Implement Option 1 functionality
                 break;
-              case 'Option 2':
-                {
-                  Navigator.of(context).pushNamed('/Help & Feedback');
-                }
+              case 'Help & Feedback':
+                Navigator.of(context).pushNamed('/Help & Feedback');
                 break;
               // Add more options as needed
             }

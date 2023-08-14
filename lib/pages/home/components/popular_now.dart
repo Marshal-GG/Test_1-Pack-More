@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:test_1/core/widgets/dot_divider.dart';
-import '../../../controller/getx/category_controller_getx.dart';
+import '../../../core/controller/getx/category_controller_getx.dart';
 import '../../../core/firebase/firebase_services.dart';
 import '../../../core/models/product_model.dart';
 

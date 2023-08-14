@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../../core/models/getx/category_model_getx.dart';
+import '../../models/getx/category_model_getx.dart';
 
 class CategoryControllerGetx extends GetxController {
   CategoryModelGetx categoryModelGetx = CategoryModelGetx(i: 0);

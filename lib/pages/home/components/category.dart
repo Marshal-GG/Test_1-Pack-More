@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/getx/category_controller_getx.dart';
+import '../../../core/controller/getx/category_controller_getx.dart';
 
 class CategoryWidget extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../../controller/getx/category_controller_getx.dart';
+import '../../core/controller/getx/category_controller_getx.dart';
 import '../../core/models/drawer_selection_model.dart';
 import '../../core/models/theme_model.dart';
 import '../../core/widgets/custom_drawer.dart';

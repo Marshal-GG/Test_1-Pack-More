@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_1/controller/getx/category_controller_getx.dart';
+import '../../core/controller/getx/category_controller_getx.dart';
 import '../../core/firebase/firebase_services.dart';
 import '../../core/models/product_model.dart';
 

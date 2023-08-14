@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_1/core/widgets/image_viewer.dart';
 import 'package:test_1/pages/add_product/add_product_page.dart';
-import 'package:test_1/pages/add_product/components/add_multiple_images.dart';
 import 'package:test_1/pages/auth_temp.dart';
 import 'package:test_1/pages/product_details/product_details.dart';
 import 'package:test_1/pages/home/home.dart';
@@ -30,11 +30,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => AddProductPage(),
         settings: settings,
       );
-    case '/add-multiple-images-page':
-      return MaterialPageRoute(
-        builder: (_) => AddMultipleImages(),
-        settings: settings,
-      );
     case '/picture-test-page':
       return MaterialPageRoute(
         builder: (_) => PictureTest(),
@@ -48,6 +43,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/user-profile-page':
       return MaterialPageRoute(
         builder: (_) => UserProfilePage(),
+        settings: settings,
+      );
+      case '/image-viewer-page':
+      return MaterialPageRoute(
+        builder: (_) => ImageViewerPage(),
         settings: settings,
       );
 

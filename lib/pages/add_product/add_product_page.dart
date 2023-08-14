@@ -1,13 +1,12 @@
 import 'dart:io';
+import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
-import 'package:test_1/pages/add_product/components/add_multiple_images.dart';
-
 import '../../core/models/drawer_selection_model.dart';
 
 class AddProductPage extends StatefulWidget {
@@ -18,13 +17,12 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-  CollectionReference _productsCollection =
-      FirebaseFirestore.instance.collection('products');
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+
   List<String> _categories = [
     'No label',
     'Electronics',
@@ -34,47 +32,7 @@ class _AddProductPageState extends State<AddProductPage> {
     'Custom',
   ];
 
-  XFile? _selectedImage;
-
-  Future<void> _getImage() async {
-    final ImagePicker picker = ImagePicker();
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image == null) return;
-    XFile? croppedImage = await _cropImage(imageFile: image);
-    if (croppedImage == null) return;
-    setState(() {
-      _selectedImage = croppedImage;
-    });
-  }
-
-  Future<XFile?> _cropImage({required XFile imageFile}) async {
-    try {
-      CroppedFile? croppedImage = await ImageCropper().cropImage(
-        sourcePath: imageFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressFormat: ImageCompressFormat.jpg,
-        compressQuality: 50,
-        // uiSettings: [
-        //   AndroidUiSettings(
-        //       backgroundColor: Colors.grey,
-        //       // hideBottomControls: true,
-        //       toolbarColor: Colors.black54)
-        // ],
-        // IOS config is not done
-      );
-
-      if (croppedImage != null) {
-        return XFile(croppedImage.path);
-      } else {
-        return null; // Handle the case where cropping was canceled or failed.
-      }
-    } catch (e) {
-      // Handle any exception that occurred during cropping.
-      print("Error while cropping image: $e");
-      return null;
-    }
-  }
+  List<XFile> _selectedImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +41,7 @@ class _AddProductPageState extends State<AddProductPage> {
         final colorScheme = Theme.of(context).colorScheme;
         String categoryValue = _categories.first;
         return Scaffold(
-          appBar: buildAppBar(),
+          appBar: buildAppBar(colorScheme),
           body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Padding(
@@ -92,35 +50,6 @@ class _AddProductPageState extends State<AddProductPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: Material(
-                        color: colorScheme.secondaryContainer,
-                        shape: CircleBorder(),
-                        child: InkWell(
-                          onTap: _getImage,
-                          customBorder: CircleBorder(),
-                          child: Ink(
-                            decoration: BoxDecoration(shape: BoxShape.circle),
-                            height: 128,
-                            width: 128,
-                            child: _selectedImage != null
-                                ? ClipOval(
-                                    child: Image.file(
-                                      File(_selectedImage!.path),
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.add_a_photo_outlined,
-                                    size: 42,
-                                    color: colorScheme.onSecondaryContainer,
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                        onPressed: _getImage, child: Text('Add Picture')),
                     SizedBox(height: 16.0),
                     Row(
                       children: [
@@ -204,16 +133,16 @@ class _AddProductPageState extends State<AddProductPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.add_shopping_cart_outlined,
-                          size: 24,
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
+                    SizedBox(height: 8),
+                    ListTile(
+                      contentPadding: EdgeInsets.only(right: 0),
+                      leading: Icon(
+                        Icons.add_shopping_cart_outlined,
+                        size: 24,
+                      ),
+                      title: Column(
+                        children: [
+                          TextFormField(
                             controller: _quantityController,
                             decoration: InputDecoration(
                               labelText: 'Quantity',
@@ -229,19 +158,18 @@ class _AddProductPageState extends State<AddProductPage> {
                               return null;
                             },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.category_outlined,
-                          size: 24,
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
+                    ListTile(
+                      contentPadding: EdgeInsets.only(right: 0),
+                      leading: Icon(
+                        Icons.category_outlined,
+                        size: 24,
+                      ),
+                      title: Column(
+                        children: [
+                          DropdownButtonFormField(
                             value: categoryValue,
                             onChanged: (newValue) {
                               setState(() {
@@ -250,6 +178,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             },
                             items: _categories.map((category) {
                               return DropdownMenuItem<String>(
+                                // alignment: Alignment.center,
                                 value: category,
                                 child: Text(category),
                               );
@@ -268,35 +197,14 @@ class _AddProductPageState extends State<AddProductPage> {
                             },
                             dropdownColor: colorScheme.onSecondary,
                             isDense: true,
+                            isExpanded: true,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24.0),
-                    ListTile(
-                      trailing: Icon(Icons.close),
-                      dense: true,
-                      leading: Icon(Icons.add_shopping_cart_outlined),
-                      title: Expanded(
-                        child: TextFormField(
-                          controller: _quantityController,
-                          decoration: InputDecoration(
-                            labelText: 'Quantity 2',
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter a quantity';
-                            }
-                            return null;
-                          },
-                        ),
+                        ],
                       ),
-                    )
-                    // AddMultipleImages()
+                    ),
+                    Divider(),
+                    buildAddImages(colorScheme),
+                    SizedBox(height: 8)
                   ],
                 ),
               ),
@@ -307,7 +215,104 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  AppBar buildAppBar() {
+  Card buildAddImages(ColorScheme colorScheme) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              'Recommanded Image Dimensions 1 X 1',
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 20,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: FilledButton.tonalIcon(
+                onPressed: () {
+                  _pickImages(context, colorScheme);
+                },
+                icon: Icon(
+                  Icons.add_a_photo_outlined,
+                  size: 24,
+                ),
+                label: Text(
+                  'Add Images (Max 8)',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+            GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: _selectedImages.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/image-viewer-page',
+                        arguments: {
+                          'imagePath': _selectedImages[index].path,
+                          'imageUrl': null,
+                        });
+                  },
+                  child: Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    margin: EdgeInsets.all(8),
+                    child: Stack(
+                      children: [
+                        Image.file(
+                          File(_selectedImages[index].path),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                        Positioned(
+                          top: 2,
+                          right: 2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: colorScheme.background.withOpacity(0.7),
+                            ),
+                            width: 33,
+                            height: 33,
+                            child: IconButton(
+                              iconSize: 18,
+                              onPressed: () => _removeImage(index),
+                              icon: Icon(
+                                Icons.close,
+                                grade: 200,
+                                weight: 700,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  AppBar buildAppBar(ColorScheme colorScheme) {
     return AppBar(
       title: Text('Add Product'),
       elevation: 0,
@@ -324,7 +329,7 @@ class _AddProductPageState extends State<AddProductPage> {
         FilledButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              _addProduct();
+              _addProduct(context, colorScheme);
             }
           },
           style: FilledButton.styleFrom(
@@ -342,8 +347,8 @@ class _AddProductPageState extends State<AddProductPage> {
               case 'Option 1':
                 // Implement Option 1 functionality
                 break;
-              case 'Option 2':
-                // Implement Option 2 functionality
+              case 'Help & Feedback':
+                Navigator.of(context).pushNamed('/Help & Feedback');
                 break;
               // Add more options as needed
             }
@@ -366,55 +371,153 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Future<void> _addProduct() async {
+  Future<void> _pickImages(
+      BuildContext context, ColorScheme colorScheme) async {
+    if (_selectedImages.length >= 8) {
+      Fluttertoast.showToast(
+        msg: 'You have reached the maximum limit of 8 images.',
+        backgroundColor: colorScheme.errorContainer,
+        textColor: colorScheme.onErrorContainer,
+      );
+      return;
+    }
+
+    List<XFile>? pickedImages = await ImagePicker().pickMultiImage();
+
+    if (pickedImages.isNotEmpty) {
+      if (_selectedImages.length + pickedImages.length <= 8) {
+        setState(() {
+          _selectedImages.addAll(pickedImages);
+        });
+      } else {
+        Fluttertoast.showToast(
+          msg: 'You can select up to 8 images only.',
+          backgroundColor: colorScheme.errorContainer,
+          textColor: colorScheme.onErrorContainer,
+        );
+      }
+    }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _selectedImages.removeAt(index);
+    });
+  }
+
+  Future<void> _addProduct(context, ColorScheme colorScheme) async {
+    // Retrieve the timestamp and format it
+    // Timestamp productTimestamp = product['timestamp'];
+    // DateTime dateTime = productTimestamp.toDate();
+    // String formattedDateTime = DateFormat.yMd().add_Hms().format(dateTime);
     try {
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('Users');
+      CollectionReference productsCollection =
+          FirebaseFirestore.instance.collection('Products Test');
+      CollectionReference imagesCollection =
+          FirebaseFirestore.instance.collection('ProductImages Test');
+
       String name = _nameController.text;
       double price = double.parse(_priceController.text);
       String description = _descriptionController.text;
       int quantity = int.parse(_quantityController.text);
-      // String category = _selectedCategory;
+      String category = 'test (hard coded)'; //categoryValue;
 
-      String imageUrl = '';
-      // if (_image != null) {
-      //   final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      //   final firebaseStorageReference =
-      //       firebase_storage.FirebaseStorage.instance.ref().child(fileName);
-      //   await firebaseStorageReference.putFile(_image);
-      //   imageUrl = await firebaseStorageReference.getDownloadURL();
-      // }
+      Timestamp timestamp = Timestamp.now();
+      String userUid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference userDocRef = usersCollection.doc(userUid);
 
-      await _productsCollection.add({
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: AlertDialog(
+              surfaceTintColor: colorScheme.background.withOpacity(0.8),
+              title: Text('Uploading Images'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(child: CircularProgressIndicator()),
+                  SizedBox(height: 16),
+                  Text('Uploading images...'),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      DocumentReference productRef = await productsCollection.add({
         'name': name,
         'price': price,
         'description': description,
         'quantity': quantity,
-        // 'category': category,
-        'imageUrl': imageUrl,
+        'category': category,
+        'userUid': userUid,
+        'timestamp': timestamp,
       });
 
-      // ignore: use_build_context_synchronously
+      // Store the images in Firebase Storage and associate them with the product
+      List<String> imagePaths = [];
+      for (XFile imageFile in _selectedImages) {
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        String imagePath = 'product_images/$fileName.jpg';
+        Reference storageReference =
+            FirebaseStorage.instance.ref().child(imagePath);
+        UploadTask uploadTask = storageReference.putFile(File(imageFile.path));
+        TaskSnapshot taskSnapshot = await uploadTask;
+        imagePath = 'gs://test-1-flutter.appspot.com/$imagePath';
+        imagePaths.add(imagePath);
+        double progress =
+            (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100;
+        print('Upload progress: $progress%');
+
+        // Store image metadata in 'productImages' collection
+        await imagesCollection.add({
+          'productId': productRef.id,
+          'imageUrl': imagePath,
+          'userUid': userUid,
+          'timestamp': timestamp,
+        });
+
+        await userDocRef.update({
+          'productIds': FieldValue.arrayUnion([productRef.id]),
+        });
+      }
+
+      // Update the product document with image URLs
+      await productRef.update({'imageUrls': imagePaths});
+
+      Navigator.of(context).pop();
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Success'),
-            content: Text('Product added successfully'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _nameController.clear();
-                  _priceController.clear();
-                  _descriptionController.clear();
-                  _quantityController.clear();
-                  // _categoryController.clear();
-                  setState(() {
-                    // _image = Null;
-                  });
-                },
-              ),
-            ],
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: AlertDialog(
+              surfaceTintColor: colorScheme.background.withOpacity(0.8),
+              title: Text('Success'),
+              content: Text('Product added successfully'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _nameController.clear();
+                    _priceController.clear();
+                    _descriptionController.clear();
+                    _quantityController.clear();
+                    setState(() {
+                      _selectedImages.clear();
+                    });
+                  },
+                ),
+              ],
+            ),
           );
         },
       );
