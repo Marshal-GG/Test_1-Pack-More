@@ -26,106 +26,10 @@ class _DetailsPageState extends State<ProductDetailsPage> {
         backgroundColor: Colors.transparent,
         title: Text('Product Details'),
       ),
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Hero(
-              tag: product.name,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: CachedNetworkImage(
-                  imageUrl: product.imageUrl!,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    '${product.name} - This is for the Example',
-                    // textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '₹${product.price}',
-                    style: TextStyle(
-                      color: colorScheme.error,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      RatingBar.builder(
-                        ignoreGestures: true,
-                        initialRating: averageRating,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemSize: 20.0,
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '(4.5k) Reviews',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : null,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isFavorite =
-                                !isFavorite; // Toggle the favorite status
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '''${product.description} Amidst the vibrant hues of the setting sun, a gentle breeze caressed the fields of golden wheat. Birds chirped merrily, their songs echoing through the tranquil countryside. A lone figure, clad in a flowing cloak, wandered aimlessly along the meandering path, lost in deep contemplation.
-
-As twilight descended, a blanket of stars adorned the velvet sky, twinkling with secrets untold. The moon, radiant and full, cast its soft glow upon the world below. Whispers of forgotten tales danced upon the night air, carrying ancient wisdom to those willing to listen.
-
-In a distant village, laughter erupted from a cozy tavern, where friends gathered to share stories and toast to life's blessings. The aroma of freshly baked bread mingled with the tantalizing scent of simmering spices, enticing passersby with promises of warmth and nourishment.''',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: colorScheme.outline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: colorScheme.surface,
-        elevation: 0,
-        clipBehavior: Clip.none,
-        child: Container(
+      body: _buildBodyContents(colorScheme),
+      persistentFooterAlignment: AlignmentDirectional.center,
+      persistentFooterButtons: [
+        Container(
           height: 56,
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -193,6 +97,104 @@ In a distant village, laughter erupted from a cozy tavern, where friends gathere
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  SingleChildScrollView _buildBodyContents(ColorScheme colorScheme) {
+    return SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Hero(
+            tag: product.name,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: CachedNetworkImage(
+                imageUrl: product.imageUrl!,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '${product.name} - This is for the Example',
+                  // textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '₹${product.price}',
+                  style: TextStyle(
+                    color: colorScheme.error,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    RatingBar.builder(
+                      ignoreGestures: true,
+                      initialRating: averageRating,
+                      minRating: 0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 20.0,
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.yellow,
+                      ),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      },
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '(4.5k) Reviews',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite ? Colors.red : null,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isFavorite =
+                              !isFavorite; // Toggle the favorite status
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Text(
+                  '''${product.description} Amidst the vibrant hues of the setting sun, a gentle breeze caressed the fields of golden wheat. Birds chirped merrily, their songs echoing through the tranquil countryside. A lone figure, clad in a flowing cloak, wandered aimlessly along the meandering path, lost in deep contemplation.
+
+As twilight descended, a blanket of stars adorned the velvet sky, twinkling with secrets untold. The moon, radiant and full, cast its soft glow upon the world below. Whispers of forgotten tales danced upon the night air, carrying ancient wisdom to those willing to listen.
+
+In a distant village, laughter erupted from a cozy tavern, where friends gathered to share stories and toast to life's blessings. The aroma of freshly baked bread mingled with the tantalizing scent of simmering spices, enticing passersby with promises of warmth and nourishment.''',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: colorScheme.outline,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

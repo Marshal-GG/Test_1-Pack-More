@@ -7,21 +7,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../core/models/drawer_selection_model.dart';
+import '../../../core/models/drawer_selection_model.dart';
+import '../seller_products_page/seller_products_page.dart';
 
-class AddProductPage extends StatefulWidget {
-  const AddProductPage({super.key});
+class EditProductPage extends StatefulWidget {
+  const EditProductPage({super.key});
 
   @override
-  State<AddProductPage> createState() => _AddProductPageState();
+  State<EditProductPage> createState() => _EditProductPageState();
 }
 
-class _AddProductPageState extends State<AddProductPage> {
+class _EditProductPageState extends State<EditProductPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+
+  late Products _initialProduct;
 
   List<String> _categories = [
     'No label',
@@ -33,6 +36,15 @@ class _AddProductPageState extends State<AddProductPage> {
   ];
 
   List<XFile> _selectedImages = [];
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _initialProduct = ModalRoute.of(context)!.settings.arguments as Products;
+  //   _nameController.text = _initialProduct.name;
+  //   _priceController.text = _initialProduct.price.toString();
+  //   _descriptionController.text = _initialProduct.description;
+  //   _quantityController.text = _initialProduct.quantity.toString();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -461,7 +473,7 @@ class _AddProductPageState extends State<AddProductPage> {
       });
 
       // Store the images in Firebase Storage and associate them with the product
-      List<String> imagePaths = [];
+      List<String> imageIds = [];
       for (XFile imageFile in _selectedImages) {
         String fileName = DateTime.now().millisecondsSinceEpoch.toString();
         String imagePath = 'product_images/$fileName.jpg';
@@ -470,26 +482,26 @@ class _AddProductPageState extends State<AddProductPage> {
         UploadTask uploadTask = storageReference.putFile(File(imageFile.path));
         TaskSnapshot taskSnapshot = await uploadTask;
         imagePath = 'gs://test-1-flutter.appspot.com/$imagePath';
-        imagePaths.add(imagePath);
+
         double progress =
             (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100;
         print('Upload progress: $progress%');
 
-        // Store image metadata in 'productImages' collection
-        await imagesCollection.add({
+        DocumentReference imageDocRef = await imagesCollection.add({
           'productId': productRef.id,
           'imageUrl': imagePath,
           'userUid': userUid,
           'timestamp': timestamp,
         });
 
+        imageIds.add(imageDocRef.id);
+
         await userDocRef.update({
           'productIds': FieldValue.arrayUnion([productRef.id]),
         });
       }
 
-      // Update the product document with image URLs
-      await productRef.update({'imageUrls': imagePaths});
+      await productRef.update({'imageUrls': imageIds});
 
       Navigator.of(context).pop();
 

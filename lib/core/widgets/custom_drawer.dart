@@ -37,6 +37,38 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               //       imageUrl:
               //           'https://lh3.googleusercontent.com/a/AAcHTtfzfevw75epBsjOeQTFHSCJQHrlUvXalRprzx39-A=s96-c'),
               // ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ListTile(
+                  leading: Icon(Icons.admin_panel_settings_outlined),
+                  title: Text(
+                    'Admin Panel',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  onTap: () {
+                    Provider.of<DrawerSelectionState>(context, listen: false)
+                        .setSelectedItem('/product-status-tracker-page');
+                    Navigator.pop(context);
+                    Navigator.pushNamed(
+                        context, '/product-status-tracker-page');
+                  },
+                  selected: selectedItem == '/product-status-tracker-page',
+                  enableFeedback: true,
+                  selectedColor: colorScheme.onSurface,
+                  selectedTileColor:
+                      colorScheme.surfaceVariant.withOpacity(0.6),
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(64),
+                      bottomRight: Radius.circular(64),
+                    ),
+                  ),
+                ),
+              ),
+              Divider(),
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.home_outlined),
                 title: 'Home',
@@ -111,6 +143,36 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: ListTile(
+                  leading: Icon(Icons.format_list_bulleted),
+                  title: Text(
+                    'All Products List',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  onTap: () {
+                    Provider.of<DrawerSelectionState>(context, listen: false)
+                        .setSelectedItem('/seller-products-page');
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/seller-products-page');
+                  },
+                  selected: selectedItem == '/seller-products-page',
+                  enableFeedback: true,
+                  selectedColor: colorScheme.onSurface,
+                  selectedTileColor:
+                      colorScheme.surfaceVariant.withOpacity(0.6),
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(64),
+                      bottomRight: Radius.circular(64),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ListTile(
                   leading: Icon(Icons.inventory_2_outlined),
                   title: Text(
                     'Add Product',
@@ -139,6 +201,7 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
                 ),
               ),
               Divider(),
+
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.settings_outlined),
                 title: 'Settings',

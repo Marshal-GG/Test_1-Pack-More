@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:test_1/core/widgets/image_viewer.dart';
-import 'package:test_1/pages/add_product/add_product_page.dart';
+import 'package:test_1/pages/admin_panel/product_status_tracker.dart';
+import 'package:test_1/pages/seller_pages/seller_add_product_page/seller_add_product_page.dart';
 import 'package:test_1/pages/auth_temp.dart';
 import 'package:test_1/pages/product_details/product_details.dart';
 import 'package:test_1/pages/home/home.dart';
 import 'package:test_1/pages/profile/user_profile_page.dart';
+import 'package:test_1/pages/seller_pages/seller_product_details_page/seller_product_details_page.dart';
 import 'package:test_1/pages/test/picture.dart';
 import 'package:test_1/pages/test/picture2.dart';
+import 'package:test_1/pages/seller_pages/seller_products_page/seller_products_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -45,9 +48,24 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => UserProfilePage(),
         settings: settings,
       );
-      case '/image-viewer-page':
+    case '/image-viewer-page':
       return MaterialPageRoute(
         builder: (_) => ImageViewerPage(),
+        settings: settings,
+      );
+    case '/seller-products-page':
+      return MaterialPageRoute(
+        builder: (_) => SellerProductsPage(),
+        settings: settings,
+      );
+    case '/seller-product-details-page':
+      return MaterialPageRoute(
+        builder: (_) => SellerProductDetailsPage(),
+        settings: settings,
+      );
+    case '/product-status-tracker-page':
+      return MaterialPageRoute(
+        builder: (_) => ProductStatusTrackerPage(),
         settings: settings,
       );
 

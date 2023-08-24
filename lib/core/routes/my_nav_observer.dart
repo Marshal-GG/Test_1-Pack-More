@@ -30,14 +30,17 @@ class MyNavigatorObserver extends NavigatorObserver {
   }
 
   void _updateSelectedItem(Route<dynamic> route) {
-    final drawerSelectionState = Provider.of<DrawerSelectionState>(
-        route.navigator!.context,
-        listen: false);
     final routeName = _getRouteName(route);
 
-    if (drawerSelectionState.selectedItem != routeName) {
-      drawerSelectionState.setSelectedItem(routeName);
-    }
+    Future.microtask(() {
+      final drawerSelectionState = Provider.of<DrawerSelectionState>(
+          route.navigator!.context,
+          listen: false);
+
+      if (drawerSelectionState.selectedItem != routeName) {
+        drawerSelectionState.setSelectedItem(routeName);
+      }
+    });
   }
 
   String _getRouteName(Route<dynamic> route) {
