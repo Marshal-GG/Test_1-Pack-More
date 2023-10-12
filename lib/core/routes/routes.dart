@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_1/core/widgets/image_viewer.dart';
+import 'package:test_1/pages/admin_panel/admin_panel_options.dart';
+import 'package:test_1/pages/admin_panel/help_feedback_tracker.dart';
 import 'package:test_1/pages/admin_panel/product_status_tracker.dart';
+import 'package:test_1/pages/help_feeback_page/help_feedback_page.dart';
 import 'package:test_1/pages/seller_pages/seller_add_product_page/seller_add_product_page.dart';
 import 'package:test_1/pages/auth_temp.dart';
 import 'package:test_1/pages/product_details/product_details.dart';
@@ -58,14 +61,29 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => SellerProductsPage(),
         settings: settings,
       );
-    case '/seller-product-details-page':
-      return MaterialPageRoute(
-        builder: (_) => SellerProductDetailsPage(),
-        settings: settings,
-      );
+    // case '/seller-product-details-page':
+    //   return MaterialPageRoute(
+    //     builder: (_) => SellerProductDetailsPage(),
+    //     settings: settings,
+    //   );
     case '/product-status-tracker-page':
       return MaterialPageRoute(
         builder: (_) => ProductStatusTrackerPage(),
+        settings: settings,
+      );
+    case '/help-feedback-page':
+      return MaterialPageRoute(
+        builder: (_) => HelpFeedbackPage(),
+        settings: settings,
+      );
+    case '/admin-panel-options-page':
+      return MaterialPageRoute(
+        builder: (_) => AdminPanelOptions(),
+        settings: settings,
+      );
+    case '/help-feedback-tracker-page':
+      return MaterialPageRoute(
+        builder: (_) => HelpFeedbackTrackerPage(),
         settings: settings,
       );
 

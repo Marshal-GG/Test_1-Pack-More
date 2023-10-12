@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import '../../core/controller/getx/category_controller_getx.dart';
+
 import '../../core/models/drawer_selection_model.dart';
 import '../../core/models/theme_model.dart';
 import '../../core/widgets/custom_drawer.dart';
+import 'bloc/home_page_bloc.dart';
 import 'components/banner_card.dart';
 import 'components/category.dart';
 import 'components/popular_now.dart';
@@ -17,50 +18,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Creating an instance of the CategoryControllerGetx
-  final CategoryControllerGetx categoryController =
-      Get.put(CategoryControllerGetx());
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<HomePageBloc>(context).add(FetchCategoriesEvent(0));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<DrawerSelectionState>(
       builder: (context, drawerSelection, child) {
         final colorScheme = Theme.of(context).colorScheme;
-        return Scaffold(
-          drawer: CustomDrawerWidget(),
-          appBar: buildAppBar(context),
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(
-              decelerationRate: ScrollDecelerationRate.fast,
-            ),
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                CategoryWidget(),
-                PopularCategoryWidget(colorScheme: colorScheme),
-                Divider(
-                  indent: 25,
-                  endIndent: 25,
-                  color: colorScheme.outlineVariant,
+        return BlocBuilder<HomePageBloc, HomePageState>(
+          builder: (context, state) {
+            return Scaffold(
+              drawer: CustomDrawerWidget(),
+              appBar: buildAppBar(context),
+              body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(
+                  decelerationRate: ScrollDecelerationRate.fast,
                 ),
-                BannerCardWidget(colorScheme: colorScheme),
-
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 45),
-                //   child: Align(
-                //     alignment: Alignment.center,
-                //     child: Text(
-                //       "Welcome!",
-                //       style: GoogleFonts.alata(
-                //           fontWeight: FontWeight.w900,
-                //           fontSize: 38,
-                //           color: colorScheme.onBackground),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    CategoryWidget(state: state),
+                    PopularCategoryWidget(
+                      state: state,
+                      colorScheme: colorScheme,
+                    ),
+                    Divider(
+                      indent: 25,
+                      endIndent: 25,
+                      color: colorScheme.outlineVariant,
+                    ),
+                    BannerCardWidget(colorScheme: colorScheme),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );

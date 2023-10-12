@@ -60,6 +60,8 @@ dependencies:
 
   flutter_rating_bar:
   photo_view:
+  flutter_bloc: 
+
 
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1
@@ -67,6 +69,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.5
+  bloc: ^8.1.2
    
 
 dev_dependencies:

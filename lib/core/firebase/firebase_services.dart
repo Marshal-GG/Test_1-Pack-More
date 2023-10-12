@@ -230,6 +230,31 @@ class FirebaseService {
     }
   }
 
+  Future<List<Products>> fetchProductsByCategory(String selectedCategoryName) async {
+    try {
+      final QuerySnapshot querySnapshot = await productsCollection.where('category', isEqualTo: selectedCategoryName).get();
+      
+      return querySnapshot.docs.map((doc) {
+        final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return Products(
+          id: data['id'],
+          name: data['name'],
+          category: data['category'],
+          description: data['description'],
+          imageUrl: data['image_url'],
+          quantity: data['quantity'],
+          price: data['price'],
+        );
+      }).toList();
+    } on FirebaseException catch (e) {
+      print('Failed to fetch products: $e');
+      return [];
+    } catch (e) {
+      print('Failed to fetch products: $e');
+      return [];
+    }
+  }
+
   // Firebase Storage methods
   Future<String?> uploadImage(File imageFile) async {
     try {

@@ -1,16 +1,15 @@
-// import '../../models/product_model.dart';
-// import '../firebase_services.dart';
+import '../firebase_services.dart';
+import '../../models/product_model.dart';
 
-// class ProductService {
-//   Future<void> fetchProductImageUrls(List<Products> products) async {
-//     for (var product in products) {
-//       if (product.imageUrl != null) {
-//         String? imageUrl =
-//             await firebaseService.getDownloadUrl(product.imageUrl!);
-//         setState(() {
-//           product.setImageUrl(imageUrl);
-//         });
-//       }
-//     }
-//   }
-// }
+class ProductsService {
+  Future<void> fetchProductImageUrls(
+      List<Products> products, FirebaseService firebaseService) async {
+    for (var product in products) {
+      if (product.imageUrl != null) {
+        String? imageUrl =
+            await firebaseService.getDownloadUrl(product.imageUrl!);
+        product.setImageUrl(imageUrl);
+      }
+    }
+  }
+}

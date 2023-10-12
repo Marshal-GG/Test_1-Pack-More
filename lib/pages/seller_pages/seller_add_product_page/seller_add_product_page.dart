@@ -537,7 +537,8 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .pushReplacementNamed('/seller-products-page');
                     _nameController.clear();
                     _priceController.clear();
                     _descriptionController.clear();

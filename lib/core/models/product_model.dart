@@ -1,25 +1,14 @@
 import '../firebase/firebase_services.dart';
 
-FirebaseService firebaseService = FirebaseService();
-
 class Products {
-  String? imageUrl;
-  void setImageUrl(String url) {
-    imageUrl = url;
-  }
-
-  Future<void> updateImageUrl(String url) async {
-    imageUrl = await firebaseService.getDownloadUrl(url);
-  }
-
   final int id;
-
-  // final String imageUrl;
   final String name;
   final String category;
   final String description;
+  String? imageUrl;
   final int quantity;
   final int price;
+  final FirebaseService firebaseService = FirebaseService();
 
   Products({
     required this.id,
@@ -30,4 +19,16 @@ class Products {
     required this.quantity,
     required this.price,
   });
+
+  Future<void> updateImageUrl(String url) async {
+    try {
+      imageUrl = await firebaseService.getDownloadUrl(url);
+    } catch (e) {
+      print('Failed to update image URL: $e');
+    }
+  }
+
+  void setImageUrl(String url) {
+    imageUrl = url;
+  }
 }

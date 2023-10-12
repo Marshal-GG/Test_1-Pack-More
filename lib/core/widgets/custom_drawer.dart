@@ -49,12 +49,11 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
                   ),
                   onTap: () {
                     Provider.of<DrawerSelectionState>(context, listen: false)
-                        .setSelectedItem('/product-status-tracker-page');
+                        .setSelectedItem('/admin-panel-options-page');
                     Navigator.pop(context);
-                    Navigator.pushNamed(
-                        context, '/product-status-tracker-page');
+                    Navigator.pushNamed(context, '/admin-panel-options-page');
                   },
-                  selected: selectedItem == '/product-status-tracker-page',
+                  selected: selectedItem == '/admin-panel-options-page',
                   enableFeedback: true,
                   selectedColor: colorScheme.onSurface,
                   selectedTileColor:
@@ -222,15 +221,16 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.help_outline),
                 title: 'Help & feedback',
-                selectedItemName: selectedItem == '/Help & feedback',
+                selectedItemName: selectedItem == '/help-feedback-page',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != '/Help & feedback') {
-                    drawerSelectionState.setSelectedItem('/Help & feedback');
+                  if (drawerSelectionState.selectedItem !=
+                      '/help-feedback-page') {
+                    drawerSelectionState.setSelectedItem('/help-feedback-page');
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/Help & feedback');
+                    Navigator.pushNamed(context, '/help-feedback-page');
                   } else {
                     Navigator.pop(context);
                   }

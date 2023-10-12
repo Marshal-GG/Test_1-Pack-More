@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_1/core/models/providers_setup.dart';
+
 import 'core/routes/routes.dart';
 import 'core/routes/my_nav_observer.dart';
 import 'core/firebase/firebase_initialize.dart';
-import 'core/models/drawer_selection_model.dart';
 import 'core/models/theme_model.dart';
 
 void main() async {
@@ -11,10 +12,7 @@ void main() async {
   await initializeApp();
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => DrawerSelectionState()),
-      ],
+      providers: providers,
       child: const MyApp(),
     ),
   );
@@ -36,8 +34,8 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Test 1 (Pack More)',
-          theme: ThemeModel.lightTheme,
-          darkTheme: ThemeModel.darkTheme,
+          theme: ThemeProvider.lightTheme,
+          darkTheme: ThemeProvider.darkTheme,
           themeMode: themeProvider.themeMode,
           initialRoute: '/',
           onGenerateRoute: generateRoute,
