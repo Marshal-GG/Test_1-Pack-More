@@ -18,7 +18,8 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final state = widget.state;
+    final state = widget.state as HomePageInitial;
+
     final categories = state.categories;
     final selectedIndex = state.selectedIndex;
     return Expanded(
@@ -54,7 +55,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                         elevation: isSelected ? 6 : 0,
                         onPressed: () {
                           BlocProvider.of<HomePageBloc>(context)
-                              .add(FetchCategoriesEvent(entry.key));
+                              .add(ChangeCategoriesEvent(newIndex: entry.key));
                         },
                       ),
                     );

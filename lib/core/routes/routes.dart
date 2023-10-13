@@ -9,10 +9,10 @@ import 'package:test_1/pages/auth_temp.dart';
 import 'package:test_1/pages/product_details/product_details.dart';
 import 'package:test_1/pages/home/home.dart';
 import 'package:test_1/pages/profile/user_profile_page.dart';
-import 'package:test_1/pages/seller_pages/seller_product_details_page/seller_product_details_page.dart';
 import 'package:test_1/pages/test/picture.dart';
 import 'package:test_1/pages/test/picture2.dart';
 import 'package:test_1/pages/seller_pages/seller_products_page/seller_products_page.dart';
+import 'package:test_1/pages/view_all_products/view_all_products.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -26,6 +26,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => HomePage(),
         settings: settings,
       );
+    
     case '/product-details-page':
       return MaterialPageRoute(
         builder: (_) => ProductDetailsPage(),
@@ -44,6 +45,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/picture2-test-page':
       return MaterialPageRoute(
         builder: (_) => PictureTest2(),
+        settings: settings,
+      );
+    case '/view-all-products-page':
+      return MaterialPageRoute(
+        builder: (_) => ViewAllProductsPage(),
         settings: settings,
       );
     case '/user-profile-page':

@@ -24,7 +24,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final state = widget.state;
+    final state = widget.state as HomePageInitial;
     final products = state.products;
 
     return Expanded(
@@ -178,7 +178,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                '/picture2-test-page',
+                '/view-all-products-page',
               );
             },
             child: Card(

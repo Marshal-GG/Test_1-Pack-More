@@ -69,6 +69,7 @@ class _BannerCardWidgetState extends State<BannerCardWidget> {
                     titleColor: widget.colorScheme.onPrimaryContainer,
                     onPress: () {
                       print('The Achievement in Delivery!!');
+                      // Navigator.pushNamed(context, '/home2-page');
                     },
                   ),
                   BannerCards(

@@ -1,22 +1,16 @@
 part of 'home_page_bloc.dart';
 
-abstract class HomePageEvent {}
+class HomePageEvent extends Equatable {  
+  const HomePageEvent();
 
-class FetchCategoriesEvent extends HomePageEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ChangeCategoriesEvent extends HomePageEvent {
   final int newIndex;
-  FetchCategoriesEvent(this.newIndex);
-}
+  ChangeCategoriesEvent({required this.newIndex});
 
-class FetchProductsByCategoryEvent extends HomePageEvent {
-  final String selectedCategoryName;
-
-  FetchProductsByCategoryEvent(this.selectedCategoryName);
-}
-
-class FetchImageUrlsEvent extends HomePageEvent {
-  final List<Products> products;
-
-  FetchImageUrlsEvent(
-    this.products,
-  );
+  @override
+  List<Object> get props => [newIndex];
 }

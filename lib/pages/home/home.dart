@@ -18,11 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<HomePageBloc>(context).add(FetchCategoriesEvent(0));
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   BlocProvider.of<HomePageBloc>(context).add(FetchCategoriesEvent(0));
+  // }
 
   @override
   Widget build(BuildContext context) {
