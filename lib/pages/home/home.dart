@@ -31,34 +31,43 @@ class _HomePageState extends State<HomePage> {
         final colorScheme = Theme.of(context).colorScheme;
         return BlocBuilder<HomePageBloc, HomePageState>(
           builder: (context, state) {
-            return Scaffold(
-              drawer: CustomDrawerWidget(),
-              appBar: buildAppBar(context),
-              body: SingleChildScrollView(
-                physics: BouncingScrollPhysics(
-                  decelerationRate: ScrollDecelerationRate.fast,
-                ),
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    CategoryWidget(state: state),
-                    PopularCategoryWidget(
-                      state: state,
-                      colorScheme: colorScheme,
-                    ),
-                    Divider(
-                      indent: 25,
-                      endIndent: 25,
-                      color: colorScheme.outlineVariant,
-                    ),
-                    BannerCardWidget(colorScheme: colorScheme),
-                  ],
-                ),
-              ),
-            );
+            if (state is HomePageLoaded) {
+              return buildMainScaffold(context, state, colorScheme);
+            } else {
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            }
           },
         );
       },
+    );
+  }
+
+  Scaffold buildMainScaffold(
+      BuildContext context, HomePageState state, ColorScheme colorScheme) {
+    return Scaffold(
+      drawer: CustomDrawerWidget(),
+      appBar: buildAppBar(context),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(
+          decelerationRate: ScrollDecelerationRate.fast,
+        ),
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            CategoryWidget(state: state),
+            PopularCategoryWidget(
+              state: state,
+              colorScheme: colorScheme,
+            ),
+            Divider(
+              indent: 25,
+              endIndent: 25,
+              color: colorScheme.outlineVariant,
+            ),
+            BannerCardWidget(colorScheme: colorScheme),
+          ],
+        ),
+      ),
     );
   }
 

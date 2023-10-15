@@ -24,7 +24,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final state = widget.state as HomePageInitial;
+    final state = widget.state as HomePageLoaded;
     final products = state.products;
 
     return Expanded(

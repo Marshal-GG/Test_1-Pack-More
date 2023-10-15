@@ -18,7 +18,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final state = widget.state as HomePageInitial;
+    final state = widget.state as HomePageLoaded;
 
     final categories = state.categories;
     final selectedIndex = state.selectedIndex;

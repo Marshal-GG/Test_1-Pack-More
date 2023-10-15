@@ -33,7 +33,7 @@ List<SingleChildWidget> providers = [
       firebaseService: FirebaseService(),
       categoryService: CategoryService(),
       productsService: ProductsService(),
-    )..add(HomePageEvent()),
+    )..add(HomePageCounterEvent()),
     child: HomePage(),
   ),
   BlocProvider<ViewAllProductsBloc>(

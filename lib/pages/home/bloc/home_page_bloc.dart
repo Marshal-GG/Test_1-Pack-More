@@ -15,58 +15,60 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   final ProductsService productsService;
   List<Map<String, dynamic>> categories = [];
   List<Products> products = [];
-  Map<String, List<Products>> productImageCache = {};
+  Map<String, List<Products>> productCache = {};
   String selectedCategoryName = '';
   int newIndex = 0;
+  bool isUpdatingCache = false;
 
   HomePageBloc({
     required this.firebaseService,
     required this.categoryService,
     required this.productsService,
-  }) : super(
-          HomePageInitial(
-            categories: [],
-            selectedIndex: 0,
-            products: [],
-          )
-        ) {
-    on<HomePageEvent>((event, emit) async {
+  }) : super(HomePageInitial()) {
+    on<HomePageCounterEvent>((event, emit) async {
       categories = await categoryService.fetchCategories();
       selectedCategoryName =
           newIndex < categories.length ? categories[newIndex]['name'] : '';
 
-      if (productImageCache.containsKey(selectedCategoryName)) {
+      if (productCache.containsKey(selectedCategoryName)) {
         products =
             await firebaseService.fetchProductsByCategory(selectedCategoryName);
-        emit((state as HomePageInitial).copyWith(
+        emit((state as HomePageLoaded).copyWith(
           categories: categories,
           selectedIndex: newIndex,
-          products: products,
-        ));
-
-        emit((state as HomePageInitial).copyWith(
-          products: productImageCache[selectedCategoryName],
+          products: productCache[selectedCategoryName],
         ));
       } else {
         products =
             await firebaseService.fetchProductsByCategory(selectedCategoryName);
-        emit((state as HomePageInitial).copyWith(
+        emit(HomePageLoaded(
           categories: categories,
           selectedIndex: newIndex,
           products: products,
         ));
 
-        products += await productsService.fetchProductImageUrls(
-            products, firebaseService);
-        productImageCache[selectedCategoryName] = products;
-        emit((state as HomePageInitial).copyWith(
+        products = await productsService.fetchProductImageUrls(
+          products,
+          firebaseService,
+        );
+        productCache[selectedCategoryName] = products;
+        emit((state as HomePageLoaded).copyWith(
+          categories: categories,
+          selectedIndex: newIndex,
           products: products,
         ));
       }
     });
-    
+
     on<ChangeCategoriesEvent>((event, emit) async {
-      newIndex = event.newIndex;
+      if (!isUpdatingCache) {
+        isUpdatingCache = true;
+
+        newIndex = event.newIndex;
+        add(HomePageCounterEvent());
+
+        isUpdatingCache = false;
+      }
     });
   }
 }

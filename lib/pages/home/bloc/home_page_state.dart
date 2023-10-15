@@ -5,23 +5,25 @@ sealed class HomePageState extends Equatable {
   List<Object?> get props => [];
 }
 
-final class HomePageInitial extends HomePageState {
+final class HomePageInitial extends HomePageState {}
+
+class HomePageLoaded extends HomePageState {
   final List<Map<String, dynamic>> categories;
   final int selectedIndex;
   final List<Products> products;
 
-  HomePageInitial({
+  HomePageLoaded({
     required this.categories,
     required this.selectedIndex,
     required this.products,
   });
 
-  HomePageInitial copyWith({
+  HomePageLoaded copyWith({
     List<Map<String, dynamic>>? categories,
     int? selectedIndex,
     List<Products>? products,
   }) {
-    return HomePageInitial(
+    return HomePageLoaded(
       categories: categories ?? this.categories,
       selectedIndex: selectedIndex ?? this.selectedIndex,
       products: products ?? this.products,

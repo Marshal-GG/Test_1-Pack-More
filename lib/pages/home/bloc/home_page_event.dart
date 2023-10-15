@@ -1,6 +1,6 @@
 part of 'home_page_bloc.dart';
 
-class HomePageEvent extends Equatable {  
+abstract class HomePageEvent extends Equatable {
   const HomePageEvent();
 
   @override
@@ -14,3 +14,5 @@ class ChangeCategoriesEvent extends HomePageEvent {
   @override
   List<Object> get props => [newIndex];
 }
+
+class HomePageCounterEvent extends HomePageEvent {}
