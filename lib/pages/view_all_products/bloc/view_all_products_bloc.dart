@@ -12,31 +12,26 @@ class ViewAllProductsBloc
     extends Bloc<ViewAllProductsEvent, ViewAllProductsState> {
   final FirebaseService firebaseService;
   final ProductsService productsService;
-  bool isFetchingMoreProducts = false;
   int page = 1;
   List<Products> products = [];
 
   ViewAllProductsBloc({
     required this.firebaseService,
     required this.productsService,
-  }) : super(ViewAllProductsInitial(products: [])) {
-    on<ViewAllProductsEvent>((event, emit) async {
+  }) : super(ViewAllProductsInitial()) {
+    on<ViewAllProductsPageCounterEvent>((event, emit) async {
       products += await firebaseService.fetchProductsByPages(page);
-      emit(ViewAllProductsInitial(products: products));
+      emit(ViewAllProductsLoaded(products: products));
 
-      products += await productsService.fetchProductImageUrls(
+      products = await productsService.fetchProductImageUrls(
           products, firebaseService);
-      emit(ViewAllProductsInitial(products: products));
+      emit(ViewAllProductsLoaded(products: products));
     });
 
-    on<ScrollListenerEvent>((event, emit) async {
-      if (!isFetchingMoreProducts) {
-        isFetchingMoreProducts = true;
+    on<ScrollListenerEvent>((event, emit) {
+      if (state is ViewAllProductsLoaded) {
         page++;
-
-        add(ViewAllProductsEvent());
-
-        isFetchingMoreProducts = false;
+        add(ViewAllProductsPageCounterEvent());
       }
     });
   }

@@ -43,7 +43,7 @@ class _PictureTest2State extends State<PictureTest2> {
         String? imageUrl =
             await firebaseService.getDownloadUrl(product.imageUrl!);
         setState(() {
-          product.setImageUrl(imageUrl);
+          // product.setImageUrl(imageUrl);
         });
       }
     }

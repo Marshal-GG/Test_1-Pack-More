@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:test_1/core/models/seller_product_model.dart';
 
-import '../../../pages/seller_pages/seller_products_page/seller_products_page.dart';
+import '../firebase_services.dart';
 
 class SellerProductService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -15,8 +16,8 @@ class SellerProductService {
       FirebaseFirestore.instance.collection('Users');
 
   // Get the Products Data
-  Future<List<Products>> getUserProducts(String userUid) async {
-    List<Products> products = [];
+  Future<List<SellerProducts>> getUserProducts(String userUid) async {
+    List<SellerProducts> products = [];
 
     DocumentSnapshot userSnapshot = await usersCollection.doc(userUid).get();
     List<String> productIds = List.from(userSnapshot['productIds']);
@@ -25,25 +26,37 @@ class SellerProductService {
       DocumentSnapshot productSnapshot =
           await productsCollection.doc(productId).get();
 
-      Products product = Products(
+      SellerProducts product = SellerProducts(
         id: productId,
         name: productSnapshot['name'],
         price: productSnapshot['price'],
         description: productSnapshot['description'],
         quantity: productSnapshot['quantity'],
-        catergory: productSnapshot['category'],
+        category: productSnapshot['category'],
         status: productSnapshot['status'],
         imageUrls: [],
       );
       products.add(product);
     }
 
-    for (int i = 0; i < products.length; i++) {
-      List<String> imageUrls = await getProductImageUrls(products[i].id);
-      products[i].imageUrls = imageUrls.cast<String>();
-    }
+    // for (int i = 0; i < products.length; i++) {
+    //   List<String> imageUrls = await getProductImageUrls(products[i].id);
+    //   products[i].imageUrls = imageUrls.cast<String>();
+    // }
 
     return products;
+  }
+
+  Future<List<SellerProducts>> fetchProductImageUrls(
+      List<SellerProducts> products, FirebaseService firebaseService) async {
+    List<SellerProducts> updatedProducts = List.of(products);
+    for (int i = 0; i < products.length; i++) {
+      List<String> imageUrls = await getProductImageUrls(products[i].id);
+      updatedProducts[i] =
+          updatedProducts[i].copyWith(imageUrls: imageUrls.cast<String>());
+      // products[i].imageUrls = imageUrls.cast<String>();
+    }
+    return updatedProducts;
   }
 
   // Get the Products Images
@@ -68,7 +81,7 @@ class SellerProductService {
   }
 
   // Delete the Product
-  Future<void> deleteProduct(Products product) async {
+  Future<void> deleteProduct(SellerProducts product) async {
     try {
       // Delete the product document
       await productsCollection.doc(product.id).delete();

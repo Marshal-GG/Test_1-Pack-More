@@ -4,7 +4,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/firebase/services/seller_product_services.dart';
-import '../seller_products_page/seller_products_page.dart';
+import '../seller_products_page/seller_view_products_page.dart';
 import 'bloc/seller_product_details_bloc.dart';
 import 'bloc/seller_product_details_state.dart';
 

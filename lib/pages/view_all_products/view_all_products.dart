@@ -40,11 +40,11 @@ class _ViewAllProductsPageState extends State<ViewAllProductsPage> {
       appBar: AppBar(title: Text('All Products')),
       body: BlocBuilder<ViewAllProductsBloc, ViewAllProductsState>(
         builder: (context, state) {
-          if (state is ViewAllProductsInitial) {
+          if (state is ViewAllProductsLoaded) {
             final products = state.products;
             return buildBody(context, products);
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

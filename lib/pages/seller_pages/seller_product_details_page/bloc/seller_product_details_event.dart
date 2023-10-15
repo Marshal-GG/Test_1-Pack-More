@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../seller_products_page/seller_products_page.dart';
+import '../../../../core/models/seller_product_model.dart';
 
 
 abstract class SellerProductDetailsEvent extends Equatable {
@@ -11,7 +11,7 @@ abstract class SellerProductDetailsEvent extends Equatable {
 }
 
 class DeleteProductEvent extends SellerProductDetailsEvent {
-  final Products product;
+  final SellerProducts product;
 
   DeleteProductEvent(this.product);
 

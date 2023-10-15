@@ -28,7 +28,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
             categories: [],
             selectedIndex: 0,
             products: [],
-          ),
+          )
         ) {
     on<HomePageEvent>((event, emit) async {
       categories = await categoryService.fetchCategories();

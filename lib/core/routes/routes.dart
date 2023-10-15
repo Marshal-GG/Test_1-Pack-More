@@ -11,7 +11,7 @@ import 'package:test_1/pages/home/home.dart';
 import 'package:test_1/pages/profile/user_profile_page.dart';
 import 'package:test_1/pages/test/picture.dart';
 import 'package:test_1/pages/test/picture2.dart';
-import 'package:test_1/pages/seller_pages/seller_products_page/seller_products_page.dart';
+import 'package:test_1/pages/seller_pages/seller_products_page/seller_view_products_page.dart';
 import 'package:test_1/pages/view_all_products/view_all_products.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -64,7 +64,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case '/seller-products-page':
       return MaterialPageRoute(
-        builder: (_) => SellerProductsPage(),
+        builder: (_) => SellerViewProductsPage(),
         settings: settings,
       );
     // case '/seller-product-details-page':

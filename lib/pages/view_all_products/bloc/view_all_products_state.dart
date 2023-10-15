@@ -5,9 +5,11 @@ sealed class ViewAllProductsState extends Equatable {
   List<Object> get props => [];
 }
 
-final class ViewAllProductsInitial extends ViewAllProductsState {
+final class ViewAllProductsInitial extends ViewAllProductsState {}
+
+class ViewAllProductsLoaded extends ViewAllProductsState {
   final List<Products> products;
-  ViewAllProductsInitial({required this.products});
+  ViewAllProductsLoaded({required this.products});
 
   @override
   List<Object> get props => [products];

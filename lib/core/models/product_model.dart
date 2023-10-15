@@ -1,11 +1,13 @@
+import 'package:equatable/equatable.dart';
+
 import '../firebase/firebase_services.dart';
 
-class Products {
+class Products extends Equatable {
   final int id;
   final String name;
   final String category;
   final String description;
-  String? imageUrl;
+  final String? imageUrl;
   final int quantity;
   final int price;
   final FirebaseService firebaseService = FirebaseService();
@@ -20,15 +22,47 @@ class Products {
     required this.price,
   });
 
-  Future<void> updateImageUrl(String url) async {
-    try {
-      imageUrl = await firebaseService.getDownloadUrl(url);
-    } catch (e) {
-      print('Failed to update image URL: $e');
-    }
+  // Future<void> updateImageUrl(String url) async {
+  //   try {
+  //     imageUrl = await firebaseService.getDownloadUrl(url);
+  //   } catch (e) {
+  //     print('Failed to update image URL: $e');
+  //   }
+  // }
+
+  // void setImageUrl(String url) {
+  //   imageUrl = url;
+  // }
+
+  Products copyWith({
+    int? id,
+    String? name,
+    String? category,
+    String? description,
+    String? imageUrl,
+    int? quantity,
+    int? price,
+  }) {
+    return Products(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+    );
   }
 
-  void setImageUrl(String url) {
-    imageUrl = url;
-  }
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        category,
+        description,
+        imageUrl,
+        quantity,
+        price,
+        firebaseService,
+      ];
 }

@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/drawer_selection_model.dart';
-import '../seller_products_page/seller_products_page.dart';
+import '../../../core/models/seller_product_model.dart';
 
 class EditProductPage extends StatefulWidget {
   const EditProductPage({super.key});
@@ -24,7 +24,7 @@ class _EditProductPageState extends State<EditProductPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
 
-  late Products _initialProduct;
+  late SellerProducts _initialProduct;
 
   List<String> _categories = [
     'No label',
