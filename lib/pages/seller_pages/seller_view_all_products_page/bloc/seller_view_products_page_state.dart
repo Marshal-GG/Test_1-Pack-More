@@ -5,9 +5,7 @@ sealed class SellerViewProductsPageState extends Equatable {
   List<Object> get props => [];
 }
 
-final class SellerViewProductsPageInitial extends SellerViewProductsPageState {
-
-}
+final class SellerViewProductsPageInitial extends SellerViewProductsPageState {}
 
 class SellerViewProductsPageLoaded extends SellerViewProductsPageState {
   final List<SellerProducts> products;
@@ -15,8 +13,6 @@ class SellerViewProductsPageLoaded extends SellerViewProductsPageState {
   SellerViewProductsPageLoaded({
     required this.products,
   });
-
-
 
   @override
   List<Object> get props => [products];

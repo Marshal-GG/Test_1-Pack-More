@@ -10,3 +10,5 @@ abstract class SellerViewProductsPageEvent extends Equatable {
 class SellerViewProductsPageCounterEvent extends SellerViewProductsPageEvent {}
 
 class ScrollListenerEvent extends SellerViewProductsPageEvent {}
+
+class ReloadProductsEvent extends SellerViewProductsPageEvent {}

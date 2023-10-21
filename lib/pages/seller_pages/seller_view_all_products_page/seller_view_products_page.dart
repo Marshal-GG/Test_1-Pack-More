@@ -13,6 +13,13 @@ class SellerViewProductsPage extends StatefulWidget {
 
 class _SellerViewProductsPageState extends State<SellerViewProductsPage> {
   @override
+  void initState() {
+    BlocProvider.of<SellerViewProductsPageBloc>(context)
+        .add(ReloadProductsEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<SellerViewProductsPageBloc, SellerViewProductsPageState>(
       builder: (context, state) {

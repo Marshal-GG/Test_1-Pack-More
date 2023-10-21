@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:test_1/core/firebase/firebase_services.dart';
+import 'package:test_1/core/firebase/services/firebase_services.dart';
 
 class AuthTemp extends StatelessWidget {
   const AuthTemp({super.key});

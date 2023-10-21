@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/firebase/firebase_services.dart';
+import '../../../../core/firebase/services/firebase_services.dart';
 import '../../../../core/firebase/services/seller_product_services.dart';
 import '../../../../core/models/seller_product_model.dart';
 
@@ -16,21 +16,28 @@ class SellerViewProductsPageBloc
   List<SellerProducts> products = [];
   String userUid = FirebaseAuth.instance.currentUser!.uid;
   int page = 1;
+  bool isLoading = false;
 
   SellerViewProductsPageBloc({
     required this.firebaseService,
     required this.sellerproductService,
   }) : super(SellerViewProductsPageInitial()) {
     on<SellerViewProductsPageCounterEvent>((event, emit) async {
-      products += await sellerproductService.getUserProducts(userUid);
-      emit(SellerViewProductsPageLoaded(products: products));
-      print('Got products ${products.length}');
+      if (!isLoading) {
+        isLoading = true;
+        products += await sellerproductService.getUserProducts(userUid);
+        emit(SellerViewProductsPageLoaded(products: products));
 
-      products = await sellerproductService.fetchProductImageUrls(
-          products, firebaseService);
-      emit(SellerViewProductsPageLoaded(products: products));
-      print('Got Images ${products.length}');
+        products = await sellerproductService.fetchProductImageUrls(
+            products, firebaseService);
+        emit(SellerViewProductsPageLoaded(products: products));
+        isLoading = false;
+      }
     });
 
+    on<ReloadProductsEvent>((event, emit) {
+      products = [];
+      add(SellerViewProductsPageCounterEvent());
+    });
   }
 }

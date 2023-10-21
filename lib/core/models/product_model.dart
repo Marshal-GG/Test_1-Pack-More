@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../firebase/firebase_services.dart';
+import '../firebase/services/firebase_services.dart';
 
 class Products extends Equatable {
   final int id;

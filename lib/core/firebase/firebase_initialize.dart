@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'firebase_options.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
-import 'firebase_services.dart';
+import 'services/firebase_services.dart';
 
 Future<void> initializeApp() async {
   try {

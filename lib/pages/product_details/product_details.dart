@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../core/models/product_model.dart';
-import '../../core/firebase/firebase_services.dart';
+import '../../core/firebase/services/firebase_services.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   ProductDetailsPage({Key? key}) : super(key: key);

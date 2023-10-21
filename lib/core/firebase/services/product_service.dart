@@ -1,4 +1,4 @@
-import '../firebase_services.dart';
+import 'firebase_services.dart';
 import '../../models/product_model.dart';
 
 class ProductsService {

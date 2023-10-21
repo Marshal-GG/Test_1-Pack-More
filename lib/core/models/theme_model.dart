@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../color_schemes.g.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static final lightTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        // systemNavigationBarContrastEnforced: true,
+        // systemStatusBarContrastEnforced: true,
+        // systemNavigationBarColor: Colors.transparent,
+      ),
+    ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     useMaterial3: true,
     colorScheme: lightColorScheme,
     brightness: Brightness.light,
   );
   static final darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+        // systemNavigationBarContrastEnforced: true,
+        // systemNavigationBarColor: Colors.transparent,
+      ),
+    ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     useMaterial3: true,
     colorScheme: darkColorScheme,
@@ -17,7 +33,6 @@ class ThemeProvider extends ChangeNotifier {
   );
 
   ThemeMode themeMode = ThemeMode.dark;
-
   static const _themeModeKey = 'themeMode';
 
   ThemeProvider() {

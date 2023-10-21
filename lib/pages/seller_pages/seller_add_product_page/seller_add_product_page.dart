@@ -499,6 +499,7 @@ class _AddProductPageState extends State<AddProductPage> {
             FirebaseStorage.instance.ref().child(imagePath);
         UploadTask uploadTask = storageReference.putFile(File(imageFile.path));
         TaskSnapshot taskSnapshot = await uploadTask;
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
         imagePath = 'gs://test-1-flutter.appspot.com/$imagePath';
 
         double progress =
@@ -507,7 +508,8 @@ class _AddProductPageState extends State<AddProductPage> {
 
         DocumentReference imageDocRef = await imagesCollection.add({
           'productId': productRef.id,
-          'imageUrl': imagePath,
+          'imagePath': imagePath,
+          'imageUrl': imageUrl,
           'userUid': userUid,
           'timestamp': timestamp,
         });

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../core/firebase/firebase_services.dart';
+import '../../core/firebase/services/firebase_services.dart';
 import '../../core/models/product_model.dart';
 
 class PictureTest2 extends StatefulWidget {
