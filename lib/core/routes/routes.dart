@@ -10,8 +10,9 @@ import '../../pages/product_details/product_details.dart';
 import '../../pages/profile/user_profile_page.dart';
 import '../../pages/seller_pages/seller_add_product_page/seller_add_product_page.dart';
 import '../../pages/seller_pages/seller_product_details_page/seller_product_details_page.dart';
-import '../../pages/seller_pages/seller_view_all_products_page/seller_view_products_page.dart';
+import '../../pages/seller_pages/seller_view_all_products_page/seller_view_all_products_page.dart';
 
+import '../../pages/test/dialoge_test.dart';
 import '../../pages/test/picture2.dart';
 import '../../pages/view_all_products/view_all_products.dart';
 import '../widgets/image_viewer.dart';
