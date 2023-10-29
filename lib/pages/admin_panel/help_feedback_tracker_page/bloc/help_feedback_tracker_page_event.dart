@@ -6,3 +6,23 @@ sealed class HelpFeedbackTrackerPageEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchNewHelpFeedbackEvent extends HelpFeedbackTrackerPageEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FetchOnHoldHelpFeedbackEvent extends HelpFeedbackTrackerPageEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FetchSolvedFeedbackEvent extends HelpFeedbackTrackerPageEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FetchRejectedFeedbackEvent extends HelpFeedbackTrackerPageEvent {
+  @override
+  List<Object> get props => [];
+}

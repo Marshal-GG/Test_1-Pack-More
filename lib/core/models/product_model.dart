@@ -7,9 +7,10 @@ class Products extends Equatable {
   final String name;
   final String category;
   final String description;
-  final String? imageUrl;
+  final String imageUrl;
   final int quantity;
   final int price;
+  final String productID;
   final FirebaseService firebaseService = FirebaseService();
 
   Products({
@@ -20,6 +21,7 @@ class Products extends Equatable {
     required this.imageUrl,
     required this.quantity,
     required this.price,
+    required this.productID
   });
 
   // Future<void> updateImageUrl(String url) async {
@@ -42,6 +44,7 @@ class Products extends Equatable {
     String? imageUrl,
     int? quantity,
     int? price,
+    String? productID,
   }) {
     return Products(
       id: id ?? this.id,
@@ -51,6 +54,7 @@ class Products extends Equatable {
       imageUrl: imageUrl ?? this.imageUrl,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
+      productID: productID ?? this.productID
     );
   }
 

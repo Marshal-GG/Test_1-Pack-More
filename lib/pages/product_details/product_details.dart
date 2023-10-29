@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../../core/firebase/services/shopping_cart_services.dart';
 import '../../core/models/product_model.dart';
 import '../../core/firebase/services/firebase_services.dart';
 
@@ -12,6 +13,7 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<ProductDetailsPage> {
   final FirebaseService firebaseService = FirebaseService();
+  final ShoppingCartService cartService = ShoppingCartService();
   late Products product;
   double averageRating = 2.5;
   bool isFavorite = false;
@@ -70,7 +72,13 @@ class _DetailsPageState extends State<ProductDetailsPage> {
                   padding: const EdgeInsets.only(left: 8),
                   child: FilledButton(
                     onPressed: () {
-                      // Handle add to cart button click
+                      cartService.addToCart(product, 1);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Added to your shopping cart'),
+                          backgroundColor: Colors.lightGreen,
+                        ),
+                      );
                     },
                     style: FilledButton.styleFrom(
                       elevation: 4,
@@ -112,7 +120,7 @@ class _DetailsPageState extends State<ProductDetailsPage> {
             child: AspectRatio(
               aspectRatio: 1,
               child: CachedNetworkImage(
-                imageUrl: product.imageUrl!,
+                imageUrl: product.imageUrl,
                 fit: BoxFit.contain,
               ),
             ),

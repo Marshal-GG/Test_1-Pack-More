@@ -1,15 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:test_1/core/widgets/custom_drawer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../help_feeback_page/bloc/help_feedback_page_bloc.dart';
 
 class HelpFeedbackItem {
   final String id;
   late final String status;
   final String message;
+  final String type;
 
   HelpFeedbackItem({
     required this.id,
     required this.status,
     required this.message,
+    required this.type,
   });
 }
 
@@ -23,44 +28,36 @@ class HelpFeedbackTrackerPage extends StatefulWidget {
 
 class _HelpFeedbackTrackerPageState extends State<HelpFeedbackTrackerPage>
     with TickerProviderStateMixin {
-  TabController? _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(length: 4, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _tabController?.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Help & Feedback Tracker'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: 'Approved'),
-            Tab(text: 'Rejected'),
-            Tab(text: 'On Hold'),
-            Tab(text: 'Not Reviewed'),
-          ],
-        ),
-      ),
-      drawer: CustomDrawerWidget(),
-      body: TabBarView(
-        children: [
-          FeedbackList(status: 'Approved'),
-          FeedbackList(status: 'Rejected'),
-          FeedbackList(status: 'On Hold'),
-          FeedbackList(status: 'Not Reviewed'),
-        ],
-      ),
+    return BlocBuilder<HelpFeedbackPageBloc, HelpFeedbackPageState>(
+      builder: (context, state) {
+        return DefaultTabController(
+          initialIndex: 1,
+          length: 4,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Help & Feedback Tracker'),
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: 'New'),
+                  Tab(text: 'On Hold'),
+                  Tab(text: 'Solved'),
+                  Tab(text: 'Rejected'),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                FeedbackList(status: 'New'),
+                FeedbackList(status: 'On Hold'),
+                FeedbackList(status: 'Solved'),
+                FeedbackList(status: 'Rejected'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -71,7 +68,7 @@ class FeedbackList extends StatefulWidget {
   const FeedbackList({required this.status});
 
   @override
-  _FeedbackListState createState() => _FeedbackListState();
+  State<FeedbackList> createState() => _FeedbackListState();
 }
 
 class _FeedbackListState extends State<FeedbackList> {
@@ -84,29 +81,45 @@ class _FeedbackListState extends State<FeedbackList> {
   }
 
   void _loadFeedbackData() {
-    // Replace this with actual data fetching logic based on widget.status
-    // Example: Fetch feedback items where status == widget.status
-    // For demonstration purposes, I'm using dummy data
-    _feedbackList = [
-      HelpFeedbackItem(id: '1', status: 'Approved', message: 'Message 1'),
-      HelpFeedbackItem(id: '2', status: 'Rejected', message: 'Message 2'),
-      HelpFeedbackItem(id: '3', status: 'On Hold', message: 'Message 3'),
-      HelpFeedbackItem(id: '4', status: 'Not Reviewed', message: 'Message 4'),
-    ];
+    FirebaseFirestore.instance
+        .collectionGroup('help_feedback')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        String type = data['type'];
+        String message = data['message'];
+        String status = data['status'];
+        String id = doc.id;
+
+        _feedbackList.add(HelpFeedbackItem(
+          id: id,
+          status: status,
+          message: message,
+          type: type,
+        ));
+      }
+
+      setState(() {
+        // Notify the widget to rebuild with the fetched data.
+      });
+    }).catchError((error) {
+      print('Error fetching data: $error');
+    });
   }
 
   void _performAction(String itemId, String action) {
-    // Replace this with actual action handling logic
-    // Update the status of the feedback item with id == itemId
     setState(() {
-      HelpFeedbackItem itemToUpdate =
-          _feedbackList.firstWhere((item) => item.id == itemId);
-      itemToUpdate.status = action;
+      // HelpFeedbackItem itemToUpdate =
+      //     widget.feedbackItems.firstWhere((item) => item.id == itemId);
+      // itemToUpdate.status = action;
+      // filterFeedbackList(); // Re-filter the list after updating the status.
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Filter the feedback list based on the selected tab.
     List<HelpFeedbackItem> filteredList =
         _feedbackList.where((item) => item.status == widget.status).toList();
 
@@ -122,7 +135,7 @@ class _FeedbackListState extends State<FeedbackList> {
             children: [
               IconButton(
                 onPressed: () {
-                  _performAction(item.id, 'Approved');
+                  _performAction(item.id, 'Solved');
                 },
                 icon: Icon(Icons.check, color: Colors.green),
               ),

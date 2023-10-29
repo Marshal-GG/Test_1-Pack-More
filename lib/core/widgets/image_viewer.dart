@@ -19,16 +19,22 @@ class ImageViewerPage extends StatelessWidget {
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: Center(
         child: imagePath != null
-            ? PhotoView(
-                imageProvider: FileImage(File(imagePath)),
-                minScale: PhotoViewComputedScale.contained,
-                maxScale: PhotoViewComputedScale.covered * 2.0,
+            ? Hero(
+                tag: imagePath,
+                child: PhotoView(
+                  imageProvider: FileImage(File(imagePath)),
+                  minScale: PhotoViewComputedScale.contained,
+                  maxScale: PhotoViewComputedScale.covered * 2.0,
+                ),
               )
             : imageUrl != null
-                ? PhotoView(
-                    imageProvider: CachedNetworkImageProvider(imageUrl),
-                    minScale: PhotoViewComputedScale.contained,
-                    maxScale: PhotoViewComputedScale.covered * 2.0,
+                ? Hero(
+                    tag: imageUrl,
+                    child: PhotoView(
+                      imageProvider: CachedNetworkImageProvider(imageUrl),
+                      minScale: PhotoViewComputedScale.contained,
+                      maxScale: PhotoViewComputedScale.covered * 2.0,
+                    ),
                   )
                 : Container(),
       ),

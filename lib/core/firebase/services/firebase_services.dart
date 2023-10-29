@@ -187,6 +187,7 @@ class FirebaseService {
           imageUrl: data['image_url'],
           quantity: data['quantity'],
           price: data['price'],
+          productID: data['productID'],
         );
       }).toList();
 
@@ -216,9 +217,10 @@ class FirebaseService {
           name: data['name'],
           category: data['category'],
           description: data['description'],
-          imageUrl: data['image_url'],
+          imageUrl: data['image_Url'],
           quantity: data['quantity'],
           price: data['price'],
+          productID: data['productID'],
         );
       }).toList();
     } on FirebaseException catch (e) {
@@ -230,10 +232,13 @@ class FirebaseService {
     }
   }
 
-  Future<List<Products>> fetchProductsByCategory(String selectedCategoryName) async {
+  Future<List<Products>> fetchProductsByCategory(
+      String selectedCategoryName) async {
     try {
-      final QuerySnapshot querySnapshot = await productsCollection.where('category', isEqualTo: selectedCategoryName).get();
-      
+      final QuerySnapshot querySnapshot = await productsCollection
+          .where('category', isEqualTo: selectedCategoryName)
+          .get();
+
       return querySnapshot.docs.map((doc) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Products(
@@ -241,9 +246,10 @@ class FirebaseService {
           name: data['name'],
           category: data['category'],
           description: data['description'],
-          imageUrl: data['image_url'],
+          imageUrl: data['image_Url'],
           quantity: data['quantity'],
           price: data['price'],
+          productID: data['productID'],
         );
       }).toList();
     } on FirebaseException catch (e) {
@@ -285,7 +291,7 @@ class FirebaseService {
 
   Future<void> addProduct(Products product) async {
     try {
-      final String? imageUrl = await uploadImage(File(product.imageUrl!));
+      final String? imageUrl = await uploadImage(File(product.imageUrl));
       if (imageUrl != null) {
         await productsCollection.add({
           'id': product.id,

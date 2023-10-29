@@ -18,12 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   BlocProvider.of<HomePageBloc>(context).add(FetchCategoriesEvent(0));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DrawerSelectionState>(
@@ -113,7 +107,9 @@ class _HomePageState extends State<HomePage> {
             height: 33,
             child: IconButton.filledTonal(
               iconSize: 17.5,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/shopping-cart-page');
+              },
               icon: Icon(
                 Icons.shopping_cart_outlined,
                 color: colorScheme.onSurface,

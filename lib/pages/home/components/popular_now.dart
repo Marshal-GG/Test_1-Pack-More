@@ -150,7 +150,7 @@ class _PopularCategoryWidgetState extends State<PopularCategoryWidget> {
         child: Semantics(
           label: product.name,
           child: CachedNetworkImage(
-            imageUrl: product.imageUrl!,
+            imageUrl: product.imageUrl,
             fit: BoxFit.cover,
             errorWidget: (context, url, error) =>
                 Center(child: CircularProgressIndicator.adaptive()),
