@@ -40,7 +40,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                       padding: EdgeInsets.symmetric(horizontal: 4),
                       child: ActionChip(
                         label: Text(
-                          category['name'],
+                          category.name,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,

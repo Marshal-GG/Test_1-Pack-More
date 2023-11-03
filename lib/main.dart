@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_1/core/routes/providers_setup.dart';
 
+import 'core/models/models.dart';
 import 'core/routes/routes.dart';
 import 'core/routes/my_nav_observer.dart';
 import 'core/firebase/firebase_initialize.dart';
-import 'core/models/theme_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

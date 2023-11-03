@@ -22,6 +22,7 @@ class OrderService {
 
       final orderRef = await _firestore.collection('orders').add(orderData);
       final orderId = orderRef.id;
+      print(orderId);
 
       _orders.add(order);
     } catch (e) {

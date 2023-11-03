@@ -1,6 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-
-import '../firebase/services/firebase_services.dart';
 
 class Products extends Equatable {
   final int id;
@@ -11,7 +10,6 @@ class Products extends Equatable {
   final int quantity;
   final int price;
   final String productID;
-  final FirebaseService firebaseService = FirebaseService();
 
   Products({
     required this.id,
@@ -21,20 +19,8 @@ class Products extends Equatable {
     required this.imageUrl,
     required this.quantity,
     required this.price,
-    required this.productID
+    required this.productID,
   });
-
-  // Future<void> updateImageUrl(String url) async {
-  //   try {
-  //     imageUrl = await firebaseService.getDownloadUrl(url);
-  //   } catch (e) {
-  //     print('Failed to update image URL: $e');
-  //   }
-  // }
-
-  // void setImageUrl(String url) {
-  //   imageUrl = url;
-  // }
 
   Products copyWith({
     int? id,
@@ -47,16 +33,55 @@ class Products extends Equatable {
     String? productID,
   }) {
     return Products(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      category: category ?? this.category,
-      description: description ?? this.description,
-      imageUrl: imageUrl ?? this.imageUrl,
-      quantity: quantity ?? this.quantity,
-      price: price ?? this.price,
-      productID: productID ?? this.productID
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        category: category ?? this.category,
+        description: description ?? this.description,
+        imageUrl: imageUrl ?? this.imageUrl,
+        quantity: quantity ?? this.quantity,
+        price: price ?? this.price,
+        productID: productID ?? this.productID);
   }
+
+  static Products fromDocument(DocumentSnapshot data) {
+    Products product = Products(
+      id: data['id'],
+      name: data['name'],
+      category: data['category'],
+      description: data['description'],
+      imageUrl: data['image_Url'],
+      quantity: data['quantity'],
+      price: data['price'],
+      productID: data['productID'],
+    );
+    return product;
+  }
+
+  Map<String, dynamic> toDocument() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'description': description,
+      'imageUrl': imageUrl,
+      'quantity': quantity,
+      'price': price,
+      'productID': productID,
+    };
+  }
+
+  // static Products fromDocument(Map<String, dynamic> productDoc) {
+  //   return Products(
+  //     id: productDoc['id'] as int,
+  //     name: productDoc['name'] as String,
+  //     category: productDoc['category'] as String,
+  //     description: productDoc['description'] as String,
+  //     imageUrl: productDoc['imageUrl'] as String,
+  //     quantity: productDoc['quantity'] as int,
+  //     price: productDoc['price'] as int,
+  //     productID: productDoc['productID'] as String,
+  //   );
+  // }
 
   @override
   List<Object?> get props => [
@@ -67,6 +92,6 @@ class Products extends Equatable {
         imageUrl,
         quantity,
         price,
-        firebaseService,
+        productID,
       ];
 }

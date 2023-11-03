@@ -34,8 +34,9 @@ class MyNavigatorObserver extends NavigatorObserver {
 
     Future.microtask(() {
       final drawerSelectionState = Provider.of<DrawerSelectionState>(
-          route.navigator!.context,
-          listen: false);
+        route.navigator!.context,
+        listen: false,
+      );
 
       if (drawerSelectionState.selectedItem != routeName) {
         drawerSelectionState.setSelectedItem(routeName);

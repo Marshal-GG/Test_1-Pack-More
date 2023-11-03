@@ -6,6 +6,7 @@ import '../../models/product_model.dart';
 class ProductsService {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
+      
   Future<List<Products>> fetchProductImageUrls(
       List<Products> products, FirebaseService firebaseService) async {
     List<Products> updatedProducts = [];

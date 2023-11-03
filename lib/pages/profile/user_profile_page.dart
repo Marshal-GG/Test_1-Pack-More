@@ -71,87 +71,185 @@ class _UserProfilePageState extends State<UserProfilePage> {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: buildAppBar(),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Form(
-            key: _formKey,
-            child: Center(
-              child: Column(
-                children: [
-                  buildProfilePicture(colorScheme),
-                  TextButton(
-                    onPressed: _getProfileImage,
-                    child: Text('Add Picture'),
-                  ),
-                  SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person_outline,
-                        size: 24,
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _fullNameController,
-                          decoration: InputDecoration(
-                            labelText: 'Full name',
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your name';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.mail_outline,
-                        size: 24,
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your email address';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(top: 8, right: 0),
-                    leading: Icon(
-                      Icons.phone_outlined,
+      body: buildBody(colorScheme),
+    );
+  }
+
+  SingleChildScrollView buildBody(ColorScheme colorScheme) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Column(
+              children: [
+                buildProfilePicture(colorScheme),
+                TextButton(
+                  onPressed: _getProfileImage,
+                  child: Text('Add Picture'),
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person_outline,
                       size: 24,
                     ),
-                    title: Column(
-                      children: [
-                        TextFormField(
-                          controller: _phoneController,
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _fullNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Full name',
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.mail_outline,
+                      size: 24,
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your email address';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(top: 8, right: 0),
+                  leading: Icon(
+                    Icons.phone_outlined,
+                    size: 24,
+                  ),
+                  title: Column(
+                    children: [
+                      TextFormField(
+                        controller: _phoneController,
+                        decoration: InputDecoration(
+                          labelText: 'Phone',
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your phone number';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(right: 0),
+                  leading: Icon(
+                    Icons.location_on_outlined,
+                    size: 24,
+                  ),
+                  title: Column(
+                    children: [
+                      TextFormField(
+                        controller: _addressController,
+                        decoration: InputDecoration(
+                          labelText: 'Address',
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.streetAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your address';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 40, right: 0),
+                  title: Column(
+                    children: [
+                      TextFormField(
+                        controller: _cityController,
+                        decoration: InputDecoration(
+                          labelText: 'City',
+                          floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.streetAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your city';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 40, right: 0),
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _stateController,
                           decoration: InputDecoration(
-                            labelText: 'Phone',
+                            labelText: 'State',
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            alignLabelWithHint: true,
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.streetAddress,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your state';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _pincodeController,
+                          decoration: InputDecoration(
+                            labelText: 'Pincode',
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                             alignLabelWithHint: true,
                             border: OutlineInputBorder(),
@@ -159,110 +257,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter your phone number';
+                              return 'Enter your pincode';
                             }
                             return null;
                           },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(right: 0),
-                    leading: Icon(
-                      Icons.location_on_outlined,
-                      size: 24,
-                    ),
-                    title: Column(
-                      children: [
-                        TextFormField(
-                          controller: _addressController,
-                          decoration: InputDecoration(
-                            labelText: 'Address',
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.streetAddress,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your address';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 40, right: 0),
-                    title: Column(
-                      children: [
-                        TextFormField(
-                          controller: _cityController,
-                          decoration: InputDecoration(
-                            labelText: 'City',
-                            floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            alignLabelWithHint: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.streetAddress,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your city';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 40, right: 0),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _stateController,
-                            decoration: InputDecoration(
-                              labelText: 'State',
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              alignLabelWithHint: true,
-                              border: OutlineInputBorder(),
-                            ),
-                            keyboardType: TextInputType.streetAddress,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your state';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _pincodeController,
-                            decoration: InputDecoration(
-                              labelText: 'Pincode',
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              alignLabelWithHint: true,
-                              border: OutlineInputBorder(),
-                            ),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Enter your pincode';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),

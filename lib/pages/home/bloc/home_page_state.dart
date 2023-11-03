@@ -8,7 +8,7 @@ sealed class HomePageState extends Equatable {
 final class HomePageInitial extends HomePageState {}
 
 class HomePageLoaded extends HomePageState {
-  final List<Map<String, dynamic>> categories;
+  final List<Category> categories;
   final int selectedIndex;
   final List<Products> products;
 
@@ -19,7 +19,7 @@ class HomePageLoaded extends HomePageState {
   });
 
   HomePageLoaded copyWith({
-    List<Map<String, dynamic>>? categories,
+    List<Category>? categories,
     int? selectedIndex,
     List<Products>? products,
   }) {

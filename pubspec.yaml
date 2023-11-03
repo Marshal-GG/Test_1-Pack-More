@@ -63,6 +63,7 @@ dependencies:
   flutter_bloc: 
   equatable: 
   bloc: 
+  gap:
 
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1

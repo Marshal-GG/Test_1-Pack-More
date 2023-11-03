@@ -21,7 +21,7 @@ class SellerProductDetailsBloc
     on<DeleteProductEvent>((event, emit) async {
       try {
         await Future.delayed(Duration(seconds: 1));
-        // await sellerproductService.deleteProduct(event.product);
+        await sellerproductService.deleteProduct(event.product);
         emit(ProductDeletedState());
       } catch (e) {
         emit(DeleteErrorState());

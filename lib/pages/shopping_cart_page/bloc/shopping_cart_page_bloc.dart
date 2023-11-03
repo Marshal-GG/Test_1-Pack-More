@@ -63,13 +63,30 @@ class ShoppingCartPageBloc
     });
 
     on<UpdateCartProductQuantity>((event, emit) async {
-      if (!isLoading) {
+      if (!isLoading && event.quantity >= 1) {
         isLoading = true;
 
         await shoppingCartService.updateCartProductQuantity(
             event.product.productID, event.quantity);
+        cartItems = await shoppingCartService.getCartItems();
+
+        // totalPrice = calculateTotalPrice(products, cartItems);
+
+        emit(ShoppingCartLoaded(
+          cartItems: cartItems,
+          isLoading: isLoading,
+          products: products,
+          totalPrice: totalPrice,
+        ));
 
         isLoading = false;
+      } else {
+        emit(ShoppingCartLoaded(
+          cartItems: cartItems,
+          isLoading: isLoading,
+          products: products,
+          totalPrice: totalPrice,
+        ));
       }
     });
   }
