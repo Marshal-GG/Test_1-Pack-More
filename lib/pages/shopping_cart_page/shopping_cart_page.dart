@@ -35,12 +35,13 @@ class _CartPageState extends State<ShoppingCartPage> {
           final totalPrice = state.totalPrice;
           return Scaffold(
             appBar: AppBar(title: Text('My Shopping Cart')),
-            body: buildBody(cartItems, products, colorScheme, bloc),
+            body: buildBody(cartItems, products, colorScheme, bloc, state),
             bottomNavigationBar:
                 buildBottomNavigationBar(colorScheme, totalPrice, cartItems),
           );
         } else if (state is ShoppingCartLoaded && state.cartItems.isEmpty) {
           return Scaffold(
+              appBar: AppBar(title: Text('My Shopping Cart')),
               body: Center(child: Text('Your shopping cart is empty.')));
         } else {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -138,8 +139,12 @@ class _CartPageState extends State<ShoppingCartPage> {
     );
   }
 
-  Padding buildBody(List<ShoppingCart> cartItems, List<Products> products,
-      ColorScheme colorScheme, ShoppingCartPageBloc bloc) {
+  Padding buildBody(
+      List<ShoppingCart> cartItems,
+      List<Products> products,
+      ColorScheme colorScheme,
+      ShoppingCartPageBloc bloc,
+      ShoppingCartLoaded state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: CustomScrollView(
@@ -150,7 +155,7 @@ class _CartPageState extends State<ShoppingCartPage> {
             child: Column(
               children: [
                 Divider(),
-                buildPriceDetailsCard(),
+                buildPriceDetailsCard(state),
                 Divider(),
                 buildAddCoupon(colorScheme)
               ],
@@ -197,7 +202,13 @@ class _CartPageState extends State<ShoppingCartPage> {
               width: 80,
               height: 40,
               child: ElevatedButton(
-                onPressed: _couponController.text.isEmpty ? null : () {},
+                onPressed: _couponController.text.isEmpty
+                    ? null
+                    : () {
+                        BlocProvider.of<ShoppingCartPageBloc>(context).add(
+                          VerifyCouponEvent(couponCode: _couponController.text),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: colorScheme.primaryContainer,
@@ -408,15 +419,14 @@ class _CartPageState extends State<ShoppingCartPage> {
                 ),
               ),
             );
-          } else {
-            return null;
           }
+          return null;
         },
       ),
     );
   }
 
-  Card buildPriceDetailsCard() {
+  Card buildPriceDetailsCard(ShoppingCartLoaded state) {
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -434,30 +444,30 @@ class _CartPageState extends State<ShoppingCartPage> {
                 Gap(5),
                 Row(
                   children: [
-                    Text('Price (1 item)'),
+                    Text('Sub-Total'),
                     Spacer(),
                     Text(
-                      '₹1,234',
+                      '₹${state.subTotal.toString()}',
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('Discount'),
+                    Text('Coupon Discount'),
                     Spacer(),
                     Text(
-                      '-₹60',
+                      '₹-${state.couponDiscount.toString()}',
                       style: TextStyle(fontSize: 16, color: Colors.green),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('Delivery Charges'),
+                    Text('Delivery Fee'),
                     Spacer(),
                     Text(
-                      '₹40',
+                      '₹${state.deliveryFee.toString()}',
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -471,7 +481,7 @@ class _CartPageState extends State<ShoppingCartPage> {
                     ),
                     Spacer(),
                     Text(
-                      '₹2,000',
+                      '₹${state.totalPrice.toString()}',
                       style: TextStyle(fontSize: 20),
                     ),
                   ],

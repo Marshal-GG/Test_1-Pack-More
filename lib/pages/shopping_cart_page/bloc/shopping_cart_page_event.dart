@@ -27,3 +27,11 @@ class RemoveFromCart extends ShoppingCartPageEvent {
   @override
   List<Object> get props => [product];
 }
+
+class VerifyCouponEvent extends ShoppingCartPageEvent {
+  final String couponCode;
+
+  VerifyCouponEvent({required this.couponCode});
+  @override
+  List<Object> get props => [couponCode];
+}

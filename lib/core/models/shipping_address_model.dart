@@ -39,6 +39,19 @@ class ShippingAddress extends Equatable {
     );
   }
 
+  static ShippingAddress fromDocument(doc) {
+    ShippingAddress shippingAddress = ShippingAddress(
+      name: doc['name'] ?? '',
+      email: doc['email'] ?? '',
+      phone: doc['phone'] ?? '',
+      address: doc['address'] ?? '',
+      city: doc['city'] ?? '',
+      state: doc['state'] ?? '',
+      pincode: doc['pincode'] ?? '',
+    );
+    return shippingAddress;
+  }
+
   Map<String, dynamic> toDocument() {
     return {
       'name': name,
@@ -49,18 +62,6 @@ class ShippingAddress extends Equatable {
       'state': state,
       'pincode': pincode,
     };
-  }
-
-  factory ShippingAddress.fromDocument(Map<String, dynamic> doc) {
-    return ShippingAddress(
-      name: doc['name'] ?? '',
-      email: doc['email'] ?? '',
-      phone: doc['phone'] ?? '',
-      address: doc['address'] ?? '',
-      city: doc['city'] ?? '',
-      state: doc['state'] ?? '',
-      pincode: doc['pincode'] ?? '',
-    );
   }
 
   @override

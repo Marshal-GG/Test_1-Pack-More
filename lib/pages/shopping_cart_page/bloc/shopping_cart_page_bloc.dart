@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../core/firebase/repositories/order_details/order_details_repo.dart';
 import '../../../core/firebase/services/shopping_cart_services.dart';
 import '../../../core/models/product_model.dart';
 import '../../../core/models/shopping_cart_model.dart';
@@ -11,10 +12,18 @@ part 'shopping_cart_page_state.dart';
 class ShoppingCartPageBloc
     extends Bloc<ShoppingCartPageEvent, ShoppingCartPageState> {
   final ShoppingCartService shoppingCartService = ShoppingCartService();
+  final OrderDetailsRepository orderDetailsRepository =
+      OrderDetailsRepository();
+
   List<ShoppingCart> cartItems = [];
   List<Products> products = [];
   bool isLoading = false;
+  bool isCouponValid = false;
   double totalPrice = 0;
+  double subTotal = 0;
+  String couponCode = '';
+  double deliveryFee = 40;
+  double couponDiscount = 0;
 
   ShoppingCartPageBloc() : super(ShoppingCartPageInitial()) {
     on<LoadShoppingCart>((event, emit) async {
@@ -25,14 +34,24 @@ class ShoppingCartPageBloc
         products =
             await shoppingCartService.fetchProductsByCartItems(cartItems);
 
-        totalPrice = calculateTotalPrice(products, cartItems);
-        print(totalPrice);
+        subTotal = await orderDetailsRepository.calculateSubTotalPrice();
+
+        totalPrice = orderDetailsRepository.calculateTotalPrice(
+          subTotal: subTotal,
+          deliveryFee: deliveryFee,
+          couponDiscount: couponDiscount,
+        );
 
         emit(ShoppingCartLoaded(
           cartItems: cartItems,
           isLoading: isLoading,
           products: products,
           totalPrice: totalPrice,
+          isCouponValid: isCouponValid,
+          couponCode: couponCode,
+          couponDiscount: couponDiscount,
+          deliveryFee: deliveryFee,
+          subTotal: subTotal,
         ));
 
         isLoading = false;
@@ -48,13 +67,18 @@ class ShoppingCartPageBloc
         cartItems.removeWhere(
             (cartItem) => cartItem.productID == event.product.productID);
 
-        totalPrice = calculateTotalPrice(products, cartItems);
-        print(totalPrice);
+        subTotal = await orderDetailsRepository.calculateSubTotalPrice();
+        totalPrice = orderDetailsRepository.calculateTotalPrice(
+          subTotal: subTotal,
+          deliveryFee: deliveryFee,
+          couponDiscount: couponDiscount,
+        );
 
-        emit(ShoppingCartLoaded(
+        emit((state as ShoppingCartLoaded).copyWith(
           cartItems: cartItems,
-          isLoading: isLoading,
           products: products,
+          isLoading: isLoading,
+          subTotal: subTotal,
           totalPrice: totalPrice,
         ));
 
@@ -70,35 +94,56 @@ class ShoppingCartPageBloc
             event.product.productID, event.quantity);
         cartItems = await shoppingCartService.getCartItems();
 
-        // totalPrice = calculateTotalPrice(products, cartItems);
-
-        emit(ShoppingCartLoaded(
+        subTotal = await orderDetailsRepository.calculateSubTotalPrice();
+        totalPrice = orderDetailsRepository.calculateTotalPrice(
+          subTotal: subTotal,
+          deliveryFee: deliveryFee,
+          couponDiscount: couponDiscount,
+        );
+        emit((state as ShoppingCartLoaded).copyWith(
           cartItems: cartItems,
           isLoading: isLoading,
-          products: products,
           totalPrice: totalPrice,
+          subTotal: subTotal,
         ));
 
         isLoading = false;
       } else {
-        emit(ShoppingCartLoaded(
+        emit((state as ShoppingCartLoaded).copyWith(
           cartItems: cartItems,
           isLoading: isLoading,
-          products: products,
           totalPrice: totalPrice,
+          subTotal: subTotal,
         ));
       }
     });
-  }
 
-  double calculateTotalPrice(
-      List<Products> products, List<ShoppingCart> cartItems) {
-    double total = 0;
-    for (var cartItem in cartItems) {
-      final product =
-          products.firstWhere((prod) => prod.productID == cartItem.productID);
-      total += product.price * cartItem.quantity;
-    }
-    return total;
+    on<VerifyCouponEvent>((event, emit) async {
+      if (!isLoading) {
+        isLoading = true;
+
+        try {
+          isCouponValid =
+              await shoppingCartService.verifyCoupon(event.couponCode);
+          couponCode = event.couponCode.toUpperCase();
+
+          isLoading = false;
+          emit((state as ShoppingCartLoaded).copyWith(
+            isLoading: isLoading,
+            isCouponValid: isCouponValid,
+            couponCode: couponCode,
+          ));
+        } catch (e) {
+          isLoading = false;
+          emit((state as ShoppingCartLoaded).copyWith(
+            isLoading: isLoading,
+            isCouponValid: isCouponValid,
+            couponCode: couponCode,
+          ));
+        }
+
+        isLoading = false;
+      }
+    });
   }
 }

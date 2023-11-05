@@ -31,6 +31,7 @@ class PaymentService {
         amount: payment.amount,
         paymentMethod: payment.paymentMethod,
         timestamp: payment.timestamp,
+        status: payment.status,
       );
 
       _payments.add(payment);
@@ -53,7 +54,8 @@ class PaymentService {
 
   double getTotalAmountForUser(String userId) {
     final userPayments = getPaymentsByUserId(userId);
-    return userPayments.fold(0.0, (total, payment) => total + payment.amount);
+    return userPayments.fold(
+        0.0, (total, payment) => total + double.parse(payment.amount));
   }
 
   void updatePayment(String paymentId, Payment updatedPayment) {

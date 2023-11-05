@@ -13,6 +13,8 @@ class Checkout extends Equatable {
   final String subtotal;
   final String deliveryFee;
   final String total;
+  final String coupon;
+  final String couponDiscount;
 
   Checkout({
     required this.name,
@@ -26,7 +28,62 @@ class Checkout extends Equatable {
     required this.subtotal,
     required this.deliveryFee,
     required this.total,
+    required this.coupon,
+    required this.couponDiscount,
   });
+
+  Map<String, Object> toDocument() {
+    final Map<String, Object> shippingAddress = {
+      'address': address,
+      'city': city,
+      'state': state,
+      'zipcode': zipcode,
+    };
+    return {
+      'shippingAddress': shippingAddress,
+      'name': name,
+      'email': email,
+      'contactNumber': contactNumber,
+      'products': products.map((product) => product.toDocument()).toList(),
+      'coupon': coupon,
+      'couponDiscount': couponDiscount,
+      'subtotal': subtotal,
+      'deliveryFee': deliveryFee,
+      'total': total,
+    };
+  }
+
+  static Checkout? fromDocument(Map<String, dynamic> data) {
+    try {
+      final Map<String, dynamic> shippingAddress =
+          data['shippingAddress'] as Map<String, dynamic>;
+
+      final List<dynamic> productDocuments = data['products'] as List<dynamic>;
+
+      // Convert product documents to a list of Products objects
+      final List<Products> products = productDocuments
+          .map((productDocument) => Products.fromDocument(productDocument))
+          .toList();
+
+      return Checkout(
+        name: data['name'] as String,
+        email: data['email'] as String,
+        contactNumber: data['contactNumber'] as String,
+        address: shippingAddress['address'] as String,
+        city: shippingAddress['city'] as String,
+        state: shippingAddress['state'] as String,
+        zipcode: shippingAddress['zipcode'] as String,
+        products: products,
+        subtotal: data['subtotal'] as String,
+        deliveryFee: data['deliveryFee'] as String,
+        total: data['total'] as String,
+        coupon: data['coupon'] as String,
+        couponDiscount: data['couponDiscount'] as String,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
   List<Object?> get props => [
@@ -41,53 +98,7 @@ class Checkout extends Equatable {
         subtotal,
         deliveryFee,
         total,
+        coupon,
+        couponDiscount,
       ];
-
-  Map<String, Object> toDocument() {
-    final Map<String, Object> custAddress = {
-      'address': address,
-      'city': city,
-      'state': state,
-      'zipcode': zipcode,
-    };
-    return {
-      'custAddress': custAddress,
-      'custName': name,
-      'custEmail': email,
-      'custContactNumber': contactNumber,
-      'products': products.map((product) => product.toDocument()).toList(),
-      'subtotal': subtotal,
-      'deliveryFee': deliveryFee,
-      'total': total,
-    };
-  }
-
-  static Checkout? fromDocument(Map<String, dynamic> data) {
-    try {
-      final Map<String, dynamic> custAddress =
-          data['custAddress'] as Map<String, dynamic>;
-      final List<dynamic> productDocuments = data['products'] as List<dynamic>;
-
-      // Convert product documents to a list of Products objects
-      final List<Products> products = productDocuments
-          .map((productDocument) => Products.fromDocument(productDocument))
-          .toList();
-
-      return Checkout(
-        name: data['custName'] as String,
-        email: data['custEmail'] as String,
-        contactNumber: data['custContactNumber'] as String,
-        address: custAddress['address'] as String,
-        city: custAddress['city'] as String,
-        state: custAddress['state'] as String,
-        zipcode: custAddress['zipcode'] as String,
-        products: products,
-        subtotal: data['subtotal'] as String,
-        deliveryFee: data['deliveryFee'] as String,
-        total: data['total'] as String,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
 }

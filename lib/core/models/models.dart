@@ -1,6 +1,6 @@
 export 'drawer_selection_model.dart';
 export 'help_feedback_model.dart';
-export 'order_model.dart';
+export 'order_details_model.dart';
 export 'payment_model.dart';
 export 'product_model.dart';
 export 'seller_product_model.dart';
@@ -9,3 +9,4 @@ export 'theme_model.dart';
 export 'check_out_model.dart';
 export 'category_model.dart';
 export 'shipping_address_model.dart';
+export 'pricing_model.dart';

@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:test_1/core/widgets/dot_divider.dart';
 
 import '../../../core/models/models.dart';
 import '../../address_details_page/bloc/address_details_page_bloc.dart';
+import '../../shopping_cart_page/bloc/shopping_cart_page_bloc.dart';
 import 'bloc/check_out_page_bloc.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -15,90 +18,202 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool hasEmptyData = true;
 
   @override
+  void initState() {
+    BlocProvider.of<AddressDetailsPageBloc>(context).add(LoadAddressDetails());
+    BlocProvider.of<ShoppingCartPageBloc>(context).add(LoadShoppingCart());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<CheckoutPageBloc, CheckoutPageState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: buildAppBar(),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                buildAddressCard(context, colorScheme),
-                Spacer(),
-                buildPriceDetailsCard(),
-              ],
+        return buildBody(state, context, colorScheme);
+      },
+    );
+  }
+
+  Scaffold buildBody(
+      CheckoutPageState state, BuildContext context, ColorScheme colorScheme) {
+    return Scaffold(
+      appBar: buildAppBar(state, context),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  buildAddressCard(context, colorScheme),
+                  Gap(20),
+                ],
+              ),
             ),
-          ),
-        );
+            buildCartProducts(colorScheme),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Gap(20),
+                  buildPriceDetailsCard(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  BlocBuilder<ShoppingCartPageBloc, ShoppingCartPageState> buildCartProducts(
+      ColorScheme colorScheme) {
+    return BlocBuilder<ShoppingCartPageBloc, ShoppingCartPageState>(
+      builder: (context, state) {
+        if (state is ShoppingCartLoaded && state.cartItems.isNotEmpty) {
+          final cartItems = state.cartItems;
+          final products = state.products;
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: cartItems.length,
+              (context, index) {
+                if (index < cartItems.length) {
+                  final Products product = products[index];
+                  return Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    elevation: 2,
+                    child: ListTile(
+                      leading: product.imageUrl.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image(
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                  image: CachedNetworkImageProvider(
+                                    product.imageUrl,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : CircularProgressIndicator.adaptive(),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            products[index].name,
+                            style: TextStyle(fontSize: 16),
+                            maxLines: 2,
+                          ),
+                          SizedBox(height: 3),
+                          Row(
+                            children: [
+                              Text(
+                                '₹ ${product.price}',
+                                style: TextStyle(color: colorScheme.primary),
+                              ),
+                              DotDivider(),
+                              Text(
+                                'Qty: ${cartItems[index].quantity}',
+                                style: TextStyle(
+                                    color: colorScheme.onBackground
+                                        .withOpacity(0.5)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/product-details-page',
+                          arguments: products[index],
+                        );
+                      },
+                    ),
+                  );
+                }
+                return null;
+              },
+            ),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
 
   Card buildPriceDetailsCard() {
     return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            title: Text(
-              'Price Details',
-              style: TextStyle(fontSize: 20),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gap(5),
-                Row(
+      child: BlocBuilder<ShoppingCartPageBloc, ShoppingCartPageState>(
+        builder: (context, state) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(
+                  'Price Details',
+                  style: TextStyle(fontSize: 20),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Price (1 item)'),
-                    Spacer(),
-                    Text(
-                      '₹1,234',
-                      style: TextStyle(fontSize: 16),
+                    Gap(5),
+                    Row(
+                      children: [
+                        Text('Sub-Total'),
+                        Spacer(),
+                        Text(
+                          '₹${(state as ShoppingCartLoaded).subTotal.toString()}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Coupon Discount'),
+                        Spacer(),
+                        Text(
+                          '₹-${state.couponDiscount.toString()}',
+                          style: TextStyle(fontSize: 16, color: Colors.green),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Delivery Fee'),
+                        Spacer(),
+                        Text(
+                          '₹${state.deliveryFee.toString()}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    Row(
+                      children: [
+                        Text(
+                          'Total',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Spacer(),
+                        Text(
+                          '₹${state.totalPrice.toString()}',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Text('Discount'),
-                    Spacer(),
-                    Text(
-                      '-₹60',
-                      style: TextStyle(fontSize: 16, color: Colors.green),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Delivery Charges'),
-                    Spacer(),
-                    Text(
-                      '₹40',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                Divider(),
-                Row(
-                  children: [
-                    Text(
-                      'Total',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Spacer(),
-                    Text(
-                      '₹2,000',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -121,9 +236,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Column(
               children: [
                 ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/address-details-page');
-                  },
                   title: Row(
                     children: [
                       Text(
@@ -133,11 +245,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Gap(10),
-                      Icon(
-                        Icons.edit_outlined,
-                        color: colorScheme.primary,
-                      ),
+                      Spacer(),
+                      OutlinedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, '/address-details-page');
+                          },
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text('Change'))
                     ],
                   ),
                   subtitle: Column(
@@ -145,16 +264,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Divider(),
                       Text(
-                        'Name: ${shippingAddress.name}',
+                        shippingAddress.name,
                         style: TextStyle(
                           fontSize: 18,
                         ),
                       ),
-                      Gap(5),
                       Text('Phone: ${shippingAddress.phone}'),
-                      Gap(5),
                       Text('Email: ${shippingAddress.email}'),
-                      Gap(5),
                       Text(
                         'Address: ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.pincode}',
                       ),
@@ -171,20 +287,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  AppBar buildAppBar() {
+  AppBar buildAppBar(CheckoutPageState state, context) {
     return AppBar(
       title: Text('Checkout'),
       actions: [
         FilledButton(
-          onPressed: () {
+          onPressed: () async {
             setState(() {});
+            BlocProvider.of<CheckoutPageBloc>(context).add(ConfirmCheckout());
+            // if (state is CheckOutPageLoadingStatus &&
+            //     !state.isLoading &&
+            //     !state.isError) {
+            Navigator.pushNamed(context, '/payment-page');
+            // }
           },
           style: FilledButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          child: Text('Save'),
+          child: Text('Continue'),
         ),
         Gap(20)
       ],

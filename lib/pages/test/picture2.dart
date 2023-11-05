@@ -158,3 +158,73 @@
 //     );
 //   }
 // }
+
+
+class ShippingAddress {
+  String address;
+  String city;
+  String state;
+  String zipcode;
+
+  ShippingAddress({
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.zipcode,
+  });
+
+  Map<String, Object> toDocument() {
+    final Map<String, Object> shippingAddress = {
+      'address': address,
+      'city': city,
+      'state': state,
+      'zipcode': zipcode,
+    };
+
+    return {
+      'shippingAddress': shippingAddress,
+      'name': 'John Doe',
+      'email': 'johndoe@example.com',
+      'contactNumber': '1234567890',
+      'products': [
+        {
+          'id': '1',
+          'name': 'Product 1',
+          'category': 'Category A',
+          'description': 'Description for Product 1',
+          'imageUrl': 'https://example.com/product1.jpg',
+          'quantity': 2,
+          'price': 25.0,
+          'productID': 'P12345',
+        },
+        {
+          'id': '2',
+          'name': 'Product 2',
+          'category': 'Category B',
+          'description': 'Description for Product 2',
+          'imageUrl': 'https://example.com/product2.jpg',
+          'quantity': 1,
+          'price': 30.0,
+          'productID': 'P67890',
+        },
+      ],
+      'coupon': 'DISCOUNTCODE',
+      'couponDiscount': 5.0,
+      'subtotal': 85.0,
+      'deliveryFee': 10.0,
+      'total': 90.0,
+    };
+  }
+}
+
+void main() {
+  final shippingAddress = ShippingAddress(
+    address: '123 Main St',
+    city: 'Sample City',
+    state: 'Sample State',
+    zipcode: '12345',
+  );
+
+  final mockData = shippingAddress.toDocument();
+  print(mockData);
+}

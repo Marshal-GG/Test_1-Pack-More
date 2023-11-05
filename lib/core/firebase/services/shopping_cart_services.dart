@@ -32,6 +32,7 @@ class ShoppingCartService {
         await cartCollection.add({
           'productID': product.productID,
           'quantity': quantity,
+          'price': product.price.toString(),
         });
       }
     } catch (e) {
@@ -53,6 +54,7 @@ class ShoppingCartService {
           return ShoppingCart(
             productID: doc['productID'],
             quantity: doc['quantity'],
+            price: doc['price'] as String,
           );
         }).toList();
       }
@@ -154,5 +156,50 @@ class ShoppingCartService {
       print('Failed to fetch products: $e');
       return [];
     }
+  }
+
+  Future<bool> verifyCoupon(String couponCode) async {
+    final upperCaseCouponCode = couponCode.toUpperCase();
+    final couponsCollection =
+        FirebaseFirestore.instance.collection('pricing').doc('Coupons');
+    try {
+      final couponDoc = await couponsCollection.get();
+
+      if (couponDoc.exists) {
+        final Map<String, dynamic> data =
+            couponDoc.data() as Map<String, dynamic>;
+        if (data.containsKey(upperCaseCouponCode)) {
+          final couponData = data[upperCaseCouponCode];
+          final DateTime expirationDate = couponData['expirationDate'].toDate();
+          // final DateTime creationDate = couponData['creationDate'].toDate();
+
+          if (expirationDate.isAfter(DateTime.now())) {
+            final userDocRef =
+                FirebaseFirestore.instance.collection('users').doc(userUid);
+            final userDetailsCollection = userDocRef.collection('Details');
+            final cartDetailsDoc = userDetailsCollection.doc('cart_details');
+
+            // final appliedCouponData = await cartDetailsDoc.get();
+            // if (appliedCouponData.exists) {
+            //   // Coupon is already applied, handle accordingly (return false or update cart details).
+            //   return false;
+            // }
+
+            await cartDetailsDoc.set(
+              {
+                'couponCode': upperCaseCouponCode,
+                'couponDiscount': couponData['discount'],
+              },
+              SetOptions(merge: true),
+            );
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error verifying coupon: $e');
+      return false;
+    }
+    return false;
   }
 }

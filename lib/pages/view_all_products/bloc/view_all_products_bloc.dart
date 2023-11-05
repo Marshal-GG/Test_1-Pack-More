@@ -33,7 +33,7 @@ class ViewAllProductsBloc
       }
     });
 
-    on<ScrollListenerEvent>((event, emit) {
+    on<ViewAllProductsScrollListenerEvent>((event, emit) {
       if (state is ViewAllProductsLoaded && !isLoading) {
         page++;
         add(ViewAllProductsPageCounterEvent());

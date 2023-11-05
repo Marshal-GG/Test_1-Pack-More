@@ -9,4 +9,4 @@ abstract class ViewAllProductsEvent extends Equatable {
 
 class ViewAllProductsPageCounterEvent extends ViewAllProductsEvent {}
 
-class ScrollListenerEvent extends ViewAllProductsEvent {}
+class ViewAllProductsScrollListenerEvent extends ViewAllProductsEvent {}

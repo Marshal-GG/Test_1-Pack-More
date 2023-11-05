@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:test_1/core/routes/providers_setup.dart';
-
-import 'core/models/models.dart';
+import 'core/routes/providers_setup.dart';
 import 'core/routes/routes.dart';
 import 'core/routes/my_nav_observer.dart';
 import 'core/firebase/firebase_initialize.dart';
+import 'core/routes/routes_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,3 +42,5 @@ class _MyAppState extends State<MyApp> {
     });
   }
 }
+
+

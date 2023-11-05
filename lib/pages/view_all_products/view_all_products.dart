@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/models/product_model.dart';
+import '../../core/routes/routes_config.dart';
 import 'bloc/view_all_products_bloc.dart';
 
 class ViewAllProductsPage extends StatefulWidget {
@@ -16,7 +14,7 @@ class _ViewAllProductsPageState extends State<ViewAllProductsPage> {
 
   @override
   void initState() {
-    scrollController.addListener(scrollListener); 
+    scrollController.addListener(scrollListener);
     super.initState();
   }
 
@@ -30,7 +28,7 @@ class _ViewAllProductsPageState extends State<ViewAllProductsPage> {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
       final viewAllProductsBloc = BlocProvider.of<ViewAllProductsBloc>(context);
-      viewAllProductsBloc.add(ScrollListenerEvent());
+      viewAllProductsBloc.add(ViewAllProductsScrollListenerEvent());
     }
   }
 
@@ -134,7 +132,7 @@ class ProductCard extends StatelessWidget {
       child: Hero(
         tag: product.name,
         child: CachedNetworkImage(
-          imageUrl: product.imageUrl!,
+          imageUrl: product.imageUrl,
           fit: BoxFit.contain,
           errorWidget: (context, url, error) =>
               Center(child: CircularProgressIndicator.adaptive()),
