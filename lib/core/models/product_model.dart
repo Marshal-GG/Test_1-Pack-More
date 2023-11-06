@@ -62,7 +62,7 @@ class Products extends Equatable {
       'name': name,
       'category': category,
       'description': description,
-      'imageUrl': imageUrl,
+      'image_Url': imageUrl,
       'quantity': quantity,
       'price': price,
       'productID': productID,

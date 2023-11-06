@@ -1,6 +1,13 @@
-import 'package:test_1/core/models/models.dart';
+import '../../../models/models.dart';
 
 abstract class BaseOrderDetailsRepository {
-  Future<void> addOrderDetails();
+  Future<Map<String, dynamic>> addOrderDetails();
   Future<List<OrderDetails>> fetchAllOrderDetails();
+  Future<OrderDetails?> fetchOrderDetailsByOrderId({required String orderId});
+  Future<double> calculateSubTotalPrice();
+  double calculateTotalPrice({
+    required double subTotal,
+    required double deliveryFee,
+    required double couponDiscount,
+  });
 }

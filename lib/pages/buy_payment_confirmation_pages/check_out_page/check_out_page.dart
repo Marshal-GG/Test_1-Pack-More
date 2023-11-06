@@ -295,11 +295,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           onPressed: () async {
             setState(() {});
             BlocProvider.of<CheckoutPageBloc>(context).add(ConfirmCheckout());
-            // if (state is CheckOutPageLoadingStatus &&
-            //     !state.isLoading &&
-            //     !state.isError) {
+
             Navigator.pushNamed(context, '/payment-page');
-            // }
           },
           style: FilledButton.styleFrom(
             shape: RoundedRectangleBorder(

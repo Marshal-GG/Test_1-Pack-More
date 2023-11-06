@@ -1,6 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+
 
 import '../../pages/view_all_products/bloc/view_all_products_bloc.dart';
 import 'routes_config.dart';
@@ -54,5 +53,11 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<AddressDetailsPageBloc>(
     create: (_) => AddressDetailsPageBloc(),
+  ),
+  BlocProvider<PaymentPageBloc>(
+    create: (_) => PaymentPageBloc(),
+  ),
+  BlocProvider<OrdersPageBloc>(
+    create: (_) => OrdersPageBloc(),
   ),
 ];

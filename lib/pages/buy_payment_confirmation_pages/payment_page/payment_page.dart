@@ -18,34 +18,47 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Payments'),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              setState(() {});
-              Navigator.pushNamed(context, '/orders-page');
-            },
-            style: FilledButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+    return BlocBuilder<PaymentPageBloc, PaymentPageState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Payments'),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  setState(() {});
+                  BlocProvider.of<PaymentPageBloc>(context).add(
+                      PaymentPageConfirmCheckoutEvent(
+                          paymentMethod: selectedOption));
+                  if ((state is PaymentPageSubmittedState) &&
+                      !state.isError &&
+                      !state.isLoading) {
+                    Navigator.pushNamed(context, '/orders-page');
+                  } else {
+                    print('error');
+                  }
+                },
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('Continue'),
               ),
-            ),
-            child: Text('Continue'),
+              Gap(20)
+            ],
           ),
-          Gap(20)
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            buildPaymentOptions(colorScheme),
-            buildPriceDetailsCard(),
-          ],
-        ),
-      ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                buildPaymentOptions(colorScheme),
+                buildPriceDetailsCard(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

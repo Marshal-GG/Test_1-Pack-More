@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../routes/routes_config.dart';
 
 class Payment extends Equatable {
   final String paymentId;
@@ -7,7 +8,7 @@ class Payment extends Equatable {
   final String status;
   final String amount;
   final String paymentMethod;
-  final DateTime timestamp;
+  final Timestamp timestamp;
 
   Payment({
     required this.paymentId,
@@ -26,7 +27,7 @@ class Payment extends Equatable {
     String? status,
     String? amount,
     String? paymentMethod,
-    DateTime? timestamp,
+    Timestamp? timestamp,
   }) {
     return Payment(
       paymentId: paymentId ?? this.paymentId,
@@ -39,21 +40,19 @@ class Payment extends Equatable {
     );
   }
 
-  static Payment fromMap(Map<String, dynamic> data) {
+  static Payment fromDocument(data) {
     return Payment(
-      paymentId: data['paymentId'] ?? '',
-      userUid: data['userUid'] ?? '',
-      orderId: data['orderId'] ?? '',
-      status: data['status'] ?? '',
-      amount: data['amount'] ?? '',
-      paymentMethod: data['paymentMethod'] ?? '',
-      timestamp: data['timestamp'] != null
-          ? DateTime.parse(data['timestamp'])
-          : DateTime.now(),
+      paymentId: data['paymentId'],
+      userUid: data['userUid'],
+      orderId: data['orderId'],
+      status: data['status'],
+      amount: data['amount'],
+      paymentMethod: data['paymentMethod'],
+      timestamp: data['timestamp'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toDocument() {
     return {
       'paymentId': paymentId,
       'userUid': userUid,
@@ -61,7 +60,7 @@ class Payment extends Equatable {
       'status': status,
       'amount': amount,
       'paymentMethod': paymentMethod,
-      'timestamp': timestamp.toUtc().toIso8601String(),
+      'timestamp': timestamp,
     };
   }
 

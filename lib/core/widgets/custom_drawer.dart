@@ -106,15 +106,15 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.inventory_outlined),
                 title: 'Orders',
-                selectedItemName: selectedItem == '/Orders',
+                selectedItemName: selectedItem == '/orders-page',
                 colorScheme: colorScheme,
                 onTap: () {
                   final drawerSelectionState =
                       Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != '/Orders') {
-                    drawerSelectionState.setSelectedItem('/Orders');
+                  if (drawerSelectionState.selectedItem != '/orders-page') {
+                    drawerSelectionState.setSelectedItem('/orders-page');
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, '/Orders');
+                    Navigator.pushNamed(context, '/orders-page');
                   } else {
                     Navigator.pop(context);
                   }

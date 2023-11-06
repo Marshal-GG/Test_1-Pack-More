@@ -314,11 +314,11 @@ class _CartPageState extends State<ShoppingCartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        products[index].name,
+                        product.name,
                         style: TextStyle(fontSize: 16),
                         maxLines: 2,
                       ),
-                      SizedBox(height: 3),
+                      Gap(3),
                       Row(
                         children: [
                           Text(

@@ -7,9 +7,4 @@ sealed class CheckoutPageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ConfirmCheckout extends CheckoutPageEvent {
-  // final OrderDetails orderDetails;
-
-  @override
-  List<Object?> get props => [];
-}
+class ConfirmCheckout extends CheckoutPageEvent {}

@@ -15,25 +15,23 @@ class CheckoutPageBloc extends Bloc<CheckoutPageEvent, CheckoutPageState> {
 
   CheckoutPageBloc() : super(CheckOutPageInitial()) {
     on<ConfirmCheckout>((event, emit) async {
-      if (!isLoading) {
-        isLoading = true;
-        emit(CheckOutPageLoadingStatus(isError: isError, isLoading: isLoading));
+      // if (!isLoading) {
+      //   isLoading = true;
+      //   emit(CheckOutPageLoadingStatus(isError: isError, isLoading: isLoading));
 
-        try {
-          await orderDetailsRepository.addOrderDetails();
-          emit(CheckOutPageSubmitted());
-        } catch (e) {
-          isError = true;
-          emit(CheckOutPageLoadingStatus(
-              isError: isError, isLoading: isLoading));
-        }
+      //   try {
+      //     await orderDetailsRepository.addOrderDetails();
+      //     emit(CheckOutPageSubmitted());
+      //   } catch (e) {
+      //     isError = true;
+      //   }
 
-        isLoading = false;
+      //   isLoading = false;
 
-        emit(CheckOutPageLoadingStatus(isError: isError, isLoading: isLoading));
+      //   emit(CheckOutPageLoadingStatus(isError: isError, isLoading: isLoading));
 
-        isError = false;
-      }
+      //   isError = false;
+      // }
     });
   }
 }

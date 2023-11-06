@@ -41,7 +41,8 @@ class ShoppingCartPageBloc
           deliveryFee: deliveryFee,
           couponDiscount: couponDiscount,
         );
-
+        isLoading = false;
+        
         emit(ShoppingCartLoaded(
           cartItems: cartItems,
           isLoading: isLoading,
@@ -53,8 +54,6 @@ class ShoppingCartPageBloc
           deliveryFee: deliveryFee,
           subTotal: subTotal,
         ));
-
-        isLoading = false;
       }
     });
 

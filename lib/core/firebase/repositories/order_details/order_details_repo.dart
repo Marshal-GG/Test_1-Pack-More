@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../../models/models.dart';
+import '../../../routes/routes_config.dart';
 import '../../services/shopping_cart_services.dart';
 import '../shipping_address/shipping_address_repo.dart';
 import 'base_order_details_repo.dart';
@@ -14,7 +12,7 @@ class OrderDetailsRepository extends BaseOrderDetailsRepository {
       ShippingAddressRepository();
 
   @override
-  Future<void> addOrderDetails() async {
+  Future<Map<String, dynamic>> addOrderDetails() async {
     try {
       List<ShoppingCart> cartItems = await shoppingCartService.getCartItems();
 
@@ -63,14 +61,14 @@ class OrderDetailsRepository extends BaseOrderDetailsRepository {
       orderDetailsRef.update({
         'orderId': orderDetailsRef.id,
       });
+
+      return {
+        'orderId': orderDetailsRef.id,
+        'totalPrice': totalPrice.toString(),
+      };
     } catch (e) {
       rethrow;
     }
-    // return firebaseFirestore
-    //     .collection('Users')
-    //     .doc(userUid)
-    //     .collection('orders')
-    //     .add(orderDetails.toDocument());
   }
 
   @override
@@ -84,9 +82,36 @@ class OrderDetailsRepository extends BaseOrderDetailsRepository {
     final orderDetails = querySnapshot.docs
         .map((doc) => OrderDetails.fromDocument(doc))
         .toList();
+
     return orderDetails;
   }
 
+  @override
+  Future<OrderDetails?> fetchOrderDetailsByOrderId({
+    required String orderId,
+  }) async {
+    try {
+      final orderDoc = await firebaseFirestore
+          .collection('Users')
+          .doc(userUid)
+          .collection('Orders')
+          .doc(orderId)
+          .get();
+
+      print(orderDoc);
+
+      if (orderDoc.exists) {
+        final data = orderDoc.data() as Map<String, dynamic>;
+        return OrderDetails.fromDocument(data);
+      }
+    } catch (e) {
+      print('Error fetching order details: $e');
+    }
+
+    return null;
+  }
+
+  @override
   Future<double> calculateSubTotalPrice() async {
     List<ShoppingCart> cartItems = await shoppingCartService.getCartItems();
 
@@ -102,13 +127,7 @@ class OrderDetailsRepository extends BaseOrderDetailsRepository {
     return total;
   }
 
-  // double calculateCouponDiscount(
-  //   Coupon coupons,
-  //   double subTotal,
-  // ) {
-  //   // Implement coupon discount calculation
-  // }
-
+  @override
   double calculateTotalPrice({
     required double subTotal,
     required double deliveryFee,
@@ -117,6 +136,13 @@ class OrderDetailsRepository extends BaseOrderDetailsRepository {
     double totalPrice = subTotal + deliveryFee + (-couponDiscount);
     return totalPrice;
   }
+
+  // double calculateCouponDiscount(
+  //   Coupon coupons,
+  //   double subTotal,
+  // ) {
+  //   // Implement coupon discount calculation
+  // }
 
   // @override
   // Future calculatePriceDetails() async {

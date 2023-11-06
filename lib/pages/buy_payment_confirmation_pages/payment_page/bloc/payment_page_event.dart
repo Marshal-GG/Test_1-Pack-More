@@ -6,3 +6,14 @@ sealed class PaymentPageEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class PaymentPageConfirmCheckoutEvent extends PaymentPageEvent {
+  final String paymentMethod;
+
+  PaymentPageConfirmCheckoutEvent({
+    required this.paymentMethod,
+  });
+
+  @override
+  List<Object> get props => [paymentMethod];
+}
