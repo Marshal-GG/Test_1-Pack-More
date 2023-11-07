@@ -16,6 +16,7 @@ export '../../pages/view_all_products/view_all_products.dart';
 export '../../pages/address_details_page/address_details_page.dart';
 export '../../pages/buy_payment_confirmation_pages/payment_page/payment_page.dart';
 export '../../pages/orders_page/orders_page.dart';
+export '../../pages/login_setup/login_page/login_page.dart';
 
 // bloc exports
 export '../../pages/address_details_page/bloc/address_details_page_bloc.dart';
@@ -34,6 +35,7 @@ export '../models/theme_model.dart';
 export '../models/drawer_selection_model.dart';
 export '../../pages/buy_payment_confirmation_pages/payment_page/bloc/payment_page_bloc.dart';
 export '../../pages/orders_page/bloc/orders_page_bloc.dart';
+export '../../pages/login_setup/bloc/login_setup_bloc.dart';
 
 // packages
 export 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +43,12 @@ export 'package:flutter/material.dart';
 export 'package:gap/gap.dart';
 export 'package:provider/provider.dart';
 export 'package:cached_network_image/cached_network_image.dart';
+export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:auto_size_text/auto_size_text.dart';
+export 'package:carousel_slider/carousel_slider.dart';
+export 'package:dots_indicator/dots_indicator.dart';
+export 'package:equatable/equatable.dart';
+export 'package:fluttertoast/fluttertoast.dart';
 
 // firebase
 export 'package:cloud_firestore/cloud_firestore.dart';

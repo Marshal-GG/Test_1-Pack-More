@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,14 +42,24 @@ class FirebaseService {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
+
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
+
         final AuthCredential authCredential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
         await _auth.signInWithCredential(authCredential);
+
+        if (kIsWeb) {
+          // Web authentication
+          await _googleSignIn.signInSilently();
+        } else {
+          // Mobile authentication
+        }
+
         currentUser = _auth.currentUser;
         await _firestore.collection('Users').doc(currentUser?.uid).set(
           {

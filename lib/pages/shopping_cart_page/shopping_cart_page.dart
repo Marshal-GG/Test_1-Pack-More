@@ -1,10 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-
 import '../../core/models/models.dart';
-import 'bloc/shopping_cart_page_bloc.dart';
+import '../../core/routes/routes_config.dart';
 
 class ShoppingCartPage extends StatefulWidget {
   ShoppingCartPage({super.key});
@@ -199,7 +194,7 @@ class _CartPageState extends State<ShoppingCartPage> {
             ),
             Gap(10),
             SizedBox(
-              width: 80,
+              // width: 80,
               height: 40,
               child: ElevatedButton(
                 onPressed: _couponController.text.isEmpty
@@ -217,7 +212,7 @@ class _CartPageState extends State<ShoppingCartPage> {
                   ),
                 ),
                 child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     "Apply",
                     style: TextStyle(
                       color: colorScheme.onPrimaryContainer,

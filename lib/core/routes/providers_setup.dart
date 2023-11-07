@@ -1,6 +1,5 @@
 import 'package:provider/single_child_widget.dart';
 
-
 import '../../pages/view_all_products/bloc/view_all_products_bloc.dart';
 import 'routes_config.dart';
 
@@ -59,5 +58,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<OrdersPageBloc>(
     create: (_) => OrdersPageBloc(),
+  ),
+  BlocProvider<LoginSetupBloc>(
+    create: (_) => LoginSetupBloc(),
   ),
 ];

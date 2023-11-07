@@ -64,6 +64,10 @@ dependencies:
   equatable: 
   bloc: 
   gap:
+  flutter_screenutil:
+  auto_size_text:
+  flutter_svg: 
+  
 
   # dynamic_color: ^1.6.5
   # dynamic_colorscheme: ^1.0.1
@@ -71,6 +75,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  
      
 dev_dependencies:
   flutter_test:
@@ -88,9 +93,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -101,6 +103,7 @@ flutter:
     - assets/images/logo/
     - assets/images/stocks/
     - assets/images/fiction/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

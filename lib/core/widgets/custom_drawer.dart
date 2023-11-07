@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/drawer_selection_model.dart';
+import '../routes/routes_config.dart';
 
 class CustomDrawerWidget extends StatefulWidget {
   const CustomDrawerWidget({super.key});
@@ -240,18 +241,26 @@ class _CustomDrawerWidgetState extends State<CustomDrawerWidget> {
               CustomDrawerItems(
                 leadingIcon: Icon(Icons.logout_outlined),
                 title: 'Logout',
-                selectedItemName: selectedItem == '/Logout',
+                selectedItemName: selectedItem == '/',
                 colorScheme: colorScheme,
-                onTap: () {
-                  final drawerSelectionState =
-                      Provider.of<DrawerSelectionState>(context, listen: false);
-                  if (drawerSelectionState.selectedItem != '/Logout') {
-                    drawerSelectionState.setSelectedItem('/Logout');
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/Logout');
-                  } else {
-                    Navigator.pop(context);
-                  }
+                onTap: () async {
+                  await FirebaseService().signInWithGoogle();
+                  Future.delayed(Duration.zero, () {
+                    final drawerSelectionState =
+                        Provider.of<DrawerSelectionState>(context,
+                            listen: false);
+                    if (drawerSelectionState.selectedItem != '/') {
+                      drawerSelectionState.setSelectedItem('/');
+                      Navigator.pop(context);
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/',
+                        (route) => false,
+                      );
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  });
                 },
               ),
             ],

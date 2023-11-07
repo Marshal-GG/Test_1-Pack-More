@@ -28,19 +28,22 @@ class _MyAppState extends State<MyApp> {
     return Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
       return SafeArea(
         top: false,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Test 1 (Pack More)',
-          theme: ThemeProvider.lightTheme,
-          darkTheme: ThemeProvider.darkTheme,
-          themeMode: themeProvider.themeMode,
-          initialRoute: '/',
-          onGenerateRoute: generateRoute,
-          navigatorObservers: [MyNavigatorObserver()],
+        child: ScreenUtilInit(
+          designSize: Size(1080, 1920),
+          builder: (context, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Test 1 (Pack More)',
+              theme: ThemeProvider.lightTheme,
+              darkTheme: ThemeProvider.darkTheme,
+              themeMode: themeProvider.themeMode,
+              initialRoute: '/',
+              onGenerateRoute: generateRoute,
+              navigatorObservers: [MyNavigatorObserver()],
+            );
+          },
         ),
       );
     });
   }
 }
-
-

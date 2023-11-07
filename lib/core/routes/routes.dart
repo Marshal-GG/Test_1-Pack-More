@@ -1,3 +1,4 @@
+
 import 'routes_config.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,6 +21,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     '/address-details-page': (_) => AddressDetailsPage(),
     '/payment-page': (_) => PaymentPage(),
     '/orders-page': (_) => OrdersPage(),
+    '/login-page': (_) => LoginPage(),
   };
 
   final WidgetBuilder? builder = routes[settings.name];

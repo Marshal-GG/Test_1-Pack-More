@@ -1,6 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/material.dart';
+import '../../../core/routes/routes_config.dart';
 
 class BannerCardWidget extends StatefulWidget {
   const BannerCardWidget({
@@ -193,8 +191,9 @@ class BannerCards extends StatelessWidget {
                           //     borderRadius: BorderRadius.circular(8),
                           //   )),
                           // ),
-                          child: Text(
+                          child: AutoSizeText(
                             "Order Now",
+                            maxLines: 1,
                             style: TextStyle(
                               color: buttonTextColor,
                               fontSize: 14,
@@ -209,7 +208,7 @@ class BannerCards extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Align(
                     alignment: Alignment.center,
                     child: FractionallySizedBox(
